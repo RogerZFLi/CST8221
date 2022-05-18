@@ -32,6 +32,7 @@ public class PlayField extends JPanel {
 	private JButton[] numbersToSelect;
 	private Map<String, String> cellsTakenMap;
 	private String numSelected;
+	private static Map<Integer, String> rowColRepStringMap;
 	
 
 	/**
@@ -75,12 +76,21 @@ public class PlayField extends JPanel {
 		numberJButtons = new JButton[(int) (Math.pow(dim, 2))][(int) (Math.pow(dim, 2))];
 		numbersToSelect = new JButton[(int) (Math.pow(dim, 2))];
 		cellsTakenMap = new HashMap<>();
+		rowColRepStringMap = new HashMap<>();
+		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
+			if(i>9) {
+				rowColRepStringMap.put(i, Character.toString('A' + i - 10));
+			}else {
+				rowColRepStringMap.put(i, String.valueOf(i));
+			}
+		}
 		for (int i = 0; i < (int) (Math.pow(dim, 2)); i++) {
 			for (int j = 0; j < (int) (Math.pow(dim, 2)); j++) {
 				
 				JButton btn = new JButton();
 				btn.setPreferredSize(new Dimension(300 / (int) (Math.pow(dim, 2))-1, 300 / (int) (Math.pow(dim, 2))-1));
-				btn.setName(String.valueOf(i)+String.valueOf(j));
+				
+				btn.setName(rowColRepStringMap.get(i) + rowColRepStringMap.get(j));
 				btn.setText(null);
 				btn.setMargin(new Insets(0, 0, 0, 0));
 				btn.addActionListener(e -> {
@@ -88,6 +98,7 @@ public class PlayField extends JPanel {
 					if (numSelected!=null) {
 						boolean available = true;
 						for(String k : cellsTakenMap.keySet()) {
+							System.out.println(k);
 							if(cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) {
 								available = false;
 								window.getLogField().getLogs().append("Invalid try...\n");
@@ -113,7 +124,6 @@ public class PlayField extends JPanel {
 				if(((i/dim)%2==0 &&(j/dim)%2==0 || (i/dim)%2!=0 && (j/dim)%2!=0)&& i%dim == 0 && j%dim == 0 ) {
 					for(int n=0; n<dim; n++) {
 						for(int m=0; m<dim; m++) {
-							System.out.println(numberJButtons[i+n][j + m].getBackground().toString());
 							numberJButtons[i+n][j + m].setBackground(new Color(220, 240, 244));
 						}
 					}
