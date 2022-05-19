@@ -113,6 +113,11 @@ public class PlayField extends JPanel {
 				btn.addActionListener(e -> {
 					
 					if (numSelected!=null) {
+						int numRep = -1;
+						if(numSelected.charAt(0) >= 10)
+							numRep = numSelected.charAt(0) - 55;
+						else
+							numRep = Integer.parseInt(numSelected);
 						boolean available = true;
 						for(String k : cellsTakenMap.keySet()) {
 							System.out.println(k);
@@ -133,21 +138,23 @@ public class PlayField extends JPanel {
 							}
 						}
 						if(available) {
-							if(btn.getText()!=null)	{			
-								numberCounter[Integer.parseInt(btn.getText())-1]--;
+							if(btn.getText()!=null)	{
+								numberCounter[numRep-1]--;
 								totalCounter--;
 							}
 							btn.setText(numSelected);
 							btn.setBackground(Color.CYAN);
 							cellsTakenMap.put(btn.getName(), numSelected);
-							numberCounter[Integer.parseInt(numSelected)-1]++;
+							
+							numberCounter[numRep-1]++;
+						
 							totalCounter++;
 							window.getLogField().getLogs().append(numSelected + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...\n");
 							String soundName = null;
 							if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
 								soundName = "complete.wav"; 
 								complete();
-							}else if(numberCounter[Integer.parseInt(numSelected)-1]  == dim * dim) {
+							}else if(numberCounter[numRep-1]  == dim * dim) {
 								soundName = "goodjob.wav";
 								stepComplete(numSelected);
 							}
