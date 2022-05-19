@@ -1,5 +1,10 @@
 /**
- * 
+ * Course  CST 8221 – JAP, Lab Section: 302
+ * Assignment: A12
+ * Professor: Paulo Sousa
+ * Date: May 29, 2022
+ * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
+ * Purpose: //TODO
  */
 package cst8221.assignment.component;
 
@@ -8,9 +13,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -18,8 +27,12 @@ import javax.swing.JPanel;
 
 import cst8221.assignment.window.MainWindow;
 /**
+ * This class is //TODO
  * @author Roger Li
  * @author Denys Savskyi
+ * @version
+ * @see
+ * @since
  *
  */
 public class PlayField extends JPanel {
@@ -33,6 +46,8 @@ public class PlayField extends JPanel {
 	private Map<String, String> cellsTakenMap;
 	private String numSelected;
 	private static Map<Integer, String> rowColRepStringMap;
+	private int[] numberCounter;
+	private int totalCounter;
 	
 
 	/**
@@ -77,6 +92,8 @@ public class PlayField extends JPanel {
 		numbersToSelect = new JButton[(int) (Math.pow(dim, 2))];
 		cellsTakenMap = new HashMap<>();
 		rowColRepStringMap = new HashMap<>();
+		numberCounter = new int[(int)Math.pow(dim, 2)];
+		totalCounter = 0;
 		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
 			if(i>9) {
 				rowColRepStringMap.put(i, Character.toString('A' + i - 10));
@@ -102,20 +119,54 @@ public class PlayField extends JPanel {
 							if(cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) {
 								available = false;
 								window.getLogField().getLogs().append("Invalid try...\n");
+								//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
+								String soundName = "wrong.wav";  
+								try {
+									AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+									Clip clip = AudioSystem.getClip();
+									clip.open(audioInputStream);
+									clip.start();
+								}catch(Exception ex) {
+									System.err.println("Error happened");
+								}
 								break;
 							}
 						}
 						if(available) {
+							if(btn.getText()!=null)	{			
+								numberCounter[Integer.parseInt(btn.getText())-1]--;
+								totalCounter--;
+							}
 							btn.setText(numSelected);
 							btn.setBackground(Color.CYAN);
 							cellsTakenMap.put(btn.getName(), numSelected);
+							numberCounter[Integer.parseInt(numSelected)-1]++;
+							totalCounter++;
 							window.getLogField().getLogs().append(numSelected + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...\n");
+							String soundName = null;
+							if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
+								soundName = "complete.wav"; 
+								complete();
+							}else if(numberCounter[Integer.parseInt(numSelected)-1]  == dim * dim) {
+								soundName = "goodjob.wav";
+								stepComplete(numSelected);
+							}
+							else
+								soundName = "correct.wav";  
+							//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
+							try {
+								AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+								Clip clip = AudioSystem.getClip();
+								clip.open(audioInputStream);
+								clip.start();
+							}catch(Exception ex) {
+								System.err.println("Error happened");
+							}
 						}
 					}
 				});
 				numberJButtons[i][j] = btn;
 				this.add(btn);
-				
 			}
 		}
 		
@@ -129,8 +180,8 @@ public class PlayField extends JPanel {
 					}
 				}
 			}
-		
 		}
+		
 		for(int i=1; i<=(int) (Math.pow(dim, 2));i++) {
 			JButton btn = new JButton(String.valueOf(i<10?i : Character.toString((char)('A' + (i - 10)))));
 			btn.setPreferredSize(new Dimension(300 / (int) (Math.pow(dim, 2))-1, 300 / (int) (Math.pow(dim, 2))-1));
@@ -142,7 +193,6 @@ public class PlayField extends JPanel {
 				for(JButton b: numbersToSelect) {
 					if(!b.equals(btn)) {
 						b.setBackground(Color.GREEN);
-						
 					}
 				}
 				window.getLogField().getLogs().append("Selected number: " + numSelected + "\n");
@@ -150,12 +200,29 @@ public class PlayField extends JPanel {
 			numbersToSelect[i-1] = btn;
 			this.add(btn);
 		}
-		
-		
 	}
 	
 	public void setDifficulty(String level) {
 		
+	}
+	
+	public void stepComplete(String number) {
+		for(int i=0; i<numberJButtons.length; i++) {
+			for(int j=0; j<numberJButtons[i].length; j++) {
+				if(numberJButtons[i][j].getText()!=null && numberJButtons[i][j].getText().equals(number)) {
+					numberJButtons[i][j].setBackground(Color.BLUE);
+				}
+			}
+		}
+	}
+	
+	public void complete() {
+		for(int i=0; i<numberJButtons.length; i++) {
+			for(int j=0; j<numberJButtons[i].length; j++) {
+				numberJButtons[i][j].setBackground(Color.PINK);
+				numberJButtons[i][j].setEnabled(false);;
+			}
+		}
 	}
 	
 	public String getNumSelected() {

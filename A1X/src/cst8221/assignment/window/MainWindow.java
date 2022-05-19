@@ -1,5 +1,10 @@
 /**
- * 
+ * Course  CST 8221 – JAP, Lab Section: 302
+ * Assignment: A12
+ * Professor: Paulo Sousa
+ * Date: May 29, 2022
+ * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
+ * Purpose: //TODO
  */
 package cst8221.assignment.window;
 
@@ -18,8 +23,12 @@ import cst8221.assignment.component.Menu;
 import cst8221.assignment.component.PlayField;
 
 /**
+ * This class is //TODO
  * @author Roger Li
  * @author Denys Savskyi
+ * @version
+ * @see
+ * @since
  *
  */
 public class MainWindow extends JFrame {
@@ -72,7 +81,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public void resetGame() {
-		playField.reload(this, 2);
+		playField.reload(this, actionField.getDimSelected()==0?2:actionField.getDimSelected());
+		playField.setNumSelected(null);
 		actionField.reset();
 		logField.getLogs().append("Resetting game... \n");
 	}

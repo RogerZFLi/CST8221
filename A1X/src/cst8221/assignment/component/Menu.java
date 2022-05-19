@@ -1,3 +1,11 @@
+/**
+ * Course  CST 8221 – JAP, Lab Section: 302
+ * Assignment: A12
+ * Professor: Paulo Sousa
+ * Date: May 29, 2022
+ * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
+ * Purpose: //TODO
+ */
 package cst8221.assignment.component;
 import java.awt.Dimension;
 
@@ -13,8 +21,12 @@ import cst8221.assignment.window.MainWindow;
 
 
 /**
+ * This class is //TODO
  * @author Roger Li
  * @author Denys Savskyi
+ * @version
+ * @see
+ * @since
  *
  */
 public class Menu extends JMenuBar {
