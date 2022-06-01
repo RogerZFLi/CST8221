@@ -22,11 +22,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
 
 import cst8221.assignment.window.MainWindow;
 
@@ -81,7 +83,6 @@ public class LogField extends JPanel {
 		
 		try {
 			myPicture = ImageIO.read(new File("logo.png"));
-			myPicture.getScaledInstance(180, 120, Image.SCALE_SMOOTH);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -89,8 +90,20 @@ public class LogField extends JPanel {
 			e.printStackTrace();
 		}
 		Image imgScaled = myPicture.getScaledInstance(200, 120, Image.SCALE_SMOOTH);
-		JButton picLabel = new JButton(new ImageIcon(imgScaled));
-		picLabel.setPreferredSize(new Dimension(180,120));
+		JButton logoButton = new JButton(new ImageIcon(imgScaled));
+		final Image img = myPicture.getScaledInstance(600, myPicture.getHeight() * 600 / myPicture.getWidth(), Image.SCALE_SMOOTH);
+		final Dimension logoSizeDimension = new Dimension(600, myPicture.getHeight() * 600 / myPicture.getWidth());
+		logoButton.addActionListener(e->{
+			JDialog info = new JDialog(window);
+			info.setTitle("Sudoku");
+			JPanel labelContainer = new JPanel();
+			JLabel author = new JLabel(new ImageIcon(img));
+			labelContainer.add(author);
+			info.add(labelContainer);
+			info.setSize(logoSizeDimension);
+			info.setVisible(true);
+		});
+		logoButton.setPreferredSize(new Dimension(180,120));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
 		JPanel logoContainer = new JPanel();
@@ -98,7 +111,7 @@ public class LogField extends JPanel {
 		logoContainer.setPreferredSize(new Dimension(180,120));
 		logoContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 		logoContainer.setAlignmentY(Component.CENTER_ALIGNMENT);
-		logoContainer.add(picLabel);
+		logoContainer.add(logoButton);
 		this.add(logoContainer);
 		
 		JPanel modePanel = new JPanel();
@@ -111,17 +124,21 @@ public class LogField extends JPanel {
 				window.getActionField().getPoint().setEnabled(false);
 				window.getActionField().getTime().setEnabled(false);
 				window.getActionField().getLevel().setEnabled(false);
+				window.getActionField().getSaveButton().setEnabled(false);
+				window.getActionField().getLoadButton().setEnabled(false);
 				
 			}
 		});
 		
 		JRadioButton playRadioButton = new JRadioButton("Play");
 		playRadioButton.addChangeListener(e->{
-			if(designRadioButton.isSelected()) {
+			if(playRadioButton.isSelected()) {
 				window.getActionField().setPlayMode(true);
 				window.getActionField().getPoint().setEnabled(true);
 				window.getActionField().getTime().setEnabled(true);
 				window.getActionField().getLevel().setEnabled(true);
+				window.getActionField().getSaveButton().setEnabled(true);
+				window.getActionField().getLoadButton().setEnabled(true);
 			}
 		});
 		ButtonGroup buttonGroup = new ButtonGroup();

@@ -113,7 +113,7 @@ public class Menu extends JMenuBar {
 			info.add(labelContainer);
 			info.setSize(new Dimension(300, 100));
 			info.setVisible(true);
-			window.getLogField().getLogs().append("About this program...\n");
+			window.log("About this program...");
 		});
 		help.add(about);
 		this.add(help);

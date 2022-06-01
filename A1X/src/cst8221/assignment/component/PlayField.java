@@ -82,7 +82,7 @@ public class PlayField extends JPanel {
 		this.invalidate();
 		this.validate();
 		this.repaint();
-		window.log("Game reloading... \n");
+		window.log("Game reloading... ");
 	}
 	/**
 	 * 
@@ -133,19 +133,14 @@ public class PlayField extends JPanel {
 				btn.addActionListener(e -> {
 					
 					if (numSelected!=null) {
-						int numRep = -1;
-						try {
-							numRep = Integer.parseInt(numSelected);
-						}catch(NumberFormatException ex) {
-							numRep = numSelected.charAt(0) - 55;
-						}
+						
 							
 						boolean available = true;
 						for(String k : cellsTakenMap.keySet()) {
 							System.out.println(k);
 							if(cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) {
 								available = false;
-								window.log("Invalid try...\n");
+								window.log("Invalid try...");
 								//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
 								String soundName = "wrong.wav";  
 								try {
@@ -160,37 +155,7 @@ public class PlayField extends JPanel {
 							}
 						}
 						if(available) {
-							if(btn.getText()!=null)	{
-								numberCounter[numRep-1]--;
-								totalCounter--;
-							}
-							btn.setText(numSelected);
-							btn.setBackground(Color.CYAN);
-							cellsTakenMap.put(btn.getName(), numSelected);
-							
-							numberCounter[numRep-1]++;
-						
-							totalCounter++;
-							window.log(numSelected + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...\n");
-							String soundName = null;
-							if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
-								soundName = "complete.wav"; 
-								complete();
-							}else if(numberCounter[numRep-1]  == dim * dim) {
-								soundName = "goodjob.wav";
-								stepComplete(numSelected);
-							}
-							else
-								soundName = "correct.wav";  
-							//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
-							try {
-								AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-								Clip clip = AudioSystem.getClip();
-								clip.open(audioInputStream);
-								clip.start();
-							}catch(Exception ex) {
-								System.err.println("Error happened");
-							}
+							fillNumber(window, btn, numSelected, dim, false);
 						}
 					}
 				});
@@ -224,10 +189,52 @@ public class PlayField extends JPanel {
 						b.setBackground(Color.GREEN);
 					}
 				}
-				window.log("Selected number: " + numSelected + "\n");
+				window.log("Selected number: " + numSelected);
 			});
 			numbersToSelect[i-1] = btn;
 			this.add(btn);
+		}
+	}
+	
+	public void fillNumber(MainWindow window, JButton btn, String number, int dim, boolean muted) {
+		int numRep = -1;
+		try {
+			numRep = Integer.parseInt(number);
+		}catch(NumberFormatException ex) {
+			numRep = number.charAt(0) - 55;
+		}
+		
+		if(btn.getText()!=null)	{
+			numberCounter[numRep-1]--;
+			totalCounter--;
+		}
+		btn.setText(number);
+		btn.setBackground(Color.CYAN);
+		cellsTakenMap.put(btn.getName(), numSelected);
+		
+		numberCounter[numRep-1]++;
+	
+		totalCounter++;
+		window.log(number + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...");
+		String soundName = null;
+		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
+			soundName = "complete.wav"; 
+			complete();
+		}else if(numberCounter[numRep-1]  == dim * dim) {
+			soundName = "goodjob.wav";
+			stepComplete(numSelected);
+		}
+		else
+			soundName = "correct.wav";  
+		if(muted) return;
+		//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		}catch(Exception ex) {
+			System.err.println("Error happened");
 		}
 	}
 	

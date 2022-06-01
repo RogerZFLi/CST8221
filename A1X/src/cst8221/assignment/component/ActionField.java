@@ -39,6 +39,7 @@ public class ActionField extends JPanel {
 	private JTextField point;
 	private JTextField time;
 	private boolean isPlayMode;
+	private JButton saveButton, loadButton;
 	
 
 	/**
@@ -59,6 +60,7 @@ public class ActionField extends JPanel {
 	 * @param window
 	 */
 	public void init(MainWindow window) {
+		
 		this.setLayout(new FlowLayout());
 		JLabel dimLabel = new JLabel("Dim: ");
 		this.add(dimLabel);
@@ -71,11 +73,12 @@ public class ActionField extends JPanel {
 			dimSelected = (Integer)dim.getSelectedItem();
 			window.getPlayField().reload(window, dimSelected);
 			window.log("Reloading...");
-			window.log("Dimension number set to :" + dimSelected + "\n");
+			window.log("Dimension number set to :" + dimSelected);
 			
 		});
-		this.add(dim);
 		
+		this.add(dim);
+		dimSelected = (Integer)dim.getSelectedItem();
 		JLabel levelLabel = new JLabel("Level: ");
 		level = new JComboBox<>();
 		level.addItem("Select");
@@ -92,10 +95,10 @@ public class ActionField extends JPanel {
 		this.add(levelLabel);
 		this.add(level);
 		
-		JButton saveButton = new JButton("Save");
+		saveButton = new JButton("Save");
 		saveButton.addActionListener(e->window.saveProgress());
 		this.add(saveButton);
-		JButton loadButton = new JButton("Load");
+		loadButton = new JButton("Load");
 		loadButton.addActionListener(e->window.loadProgress());
 		this.add(loadButton);
 		JButton randButton = new JButton("Rand");
@@ -215,6 +218,20 @@ public class ActionField extends JPanel {
 	public void setDim(JComboBox<Integer> dim) {
 		this.dim = dim;
 	}
+	public JButton getSaveButton() {
+		return saveButton;
+	}
+	public void setSaveButton(JButton saveButton) {
+		this.saveButton = saveButton;
+	}
+	public JButton getLoadButton() {
+		return loadButton;
+	}
+	public void setLoadButton(JButton loadButton) {
+		this.loadButton = loadButton;
+	}
+	
+	
 	
 	
 }

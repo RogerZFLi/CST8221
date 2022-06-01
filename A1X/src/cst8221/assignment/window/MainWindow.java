@@ -13,8 +13,12 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Scanner;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -88,12 +92,56 @@ public class MainWindow extends JFrame {
 		playField.reload(this, actionField.getDimSelected()==0?2:actionField.getDimSelected());
 		playField.setNumSelected(null);
 		actionField.reset();
-		log("Resetting game... \n");
+		log("Resetting game...");
 	}
 	
 	public void loadProgress() {
 		
 		log("Loading progress....");
+		
+		//Open current project folder location to save file
+		JFileChooser fileChooser = new JFileChooser(".");
+		fileChooser.setDialogTitle("Specify a file to load");   
+		 
+		int userSelection = fileChooser.showSaveDialog(this);
+		File fileToRead = null;
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+			fileToRead = fileChooser.getSelectedFile();
+		    System.out.println("Save as file: " + fileToRead.getAbsolutePath());
+		}
+		//Read progress from file
+		if(fileToRead!=null) {
+			try (Scanner scanner = new Scanner(fileToRead)){
+				int dimNumber = scanner.nextInt();
+				scanner.nextLine();
+				String level = scanner.nextLine();
+				String point = scanner.nextLine();
+				String time = scanner.nextLine();
+				getActionField().getDim().setSelectedItem(dimNumber);
+				getActionField().getLevel().setSelectedItem(level);
+				getActionField().getPoint().setText(point);
+				getActionField().getTime().setText(time);
+				JButton[][] btns = getPlayField().getNumberJButtons();
+				
+				for(int i=0; i<btns.length; i++) {
+					String line = null;
+					if(scanner.hasNext()) {
+						line = scanner.nextLine();
+						System.out.println(line);
+						String[] numbers = line.split(",");
+						for(int j=0; j<btns[i].length; j++) {
+							if(!numbers[j].isBlank()) {
+								this.getPlayField().fillNumber(this, btns[i][j], numbers[j], dimNumber,true);
+							}
+						}
+					}
+				}
+				log("Progress loaded....");
+			} catch (IOException e) {
+				log("Fail to load progress...");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -105,22 +153,54 @@ public class MainWindow extends JFrame {
 	 **/
 	
 	public void saveProgress() {
-		JFileChooser fileChooser = new JFileChooser(new File("myProgress.sdk"));
+		log("Saving progress....");
+		StringBuilder sb = new StringBuilder();
+		JButton[][] btns = getPlayField().getNumberJButtons();
+		sb.append(getActionField().getDimSelected());
+		sb.append("\n");
+		sb.append(getActionField().getLevel().getSelectedItem());
+		sb.append("\n");
+		sb.append(getActionField().getPoint().getText());
+		sb.append("\n");
+		sb.append(getActionField().getTime().getText());
+		sb.append("\n");
+		for(int i=0; i<btns.length; i++) {
+			for(int j=0; j<btns.length; j++) {
+				String numString = btns[i][j].getText();
+				if(numString == null)
+					sb.append(" ");
+				else {
+					sb.append(numString);
+				}
+				if(j<btns[i].length - 1)
+					sb.append(",");
+			}
+			sb.append("\n");
+		}
+		
+		//Open current project folder location to save file
+		JFileChooser fileChooser = new JFileChooser(".");
 		fileChooser.setDialogTitle("Specify a file to save");   
 		 
 		int userSelection = fileChooser.showSaveDialog(this);
-		 
+		File fileToSave = null;
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
-		    File fileToSave = new File("myProgress.sdk");
+			fileToSave = fileChooser.getSelectedFile();
 		    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
 		}
-//		for(int i=0; i<getPlayField().getNumberJButtons().length; i++) {
-//			for(int j=0; j<getPlayField().getNumberJButtons().length; j++) {
-//				existingNumbers[i][j] = getPlayField().getNumberJButtons()[i][j].getText();
-//			}
-//		}
+		//Save file
+		if(fileToSave!=null) {
+			try (FileWriter fw = new FileWriter(fileToSave)){
+				fw.write(sb.toString());
+				log("Progress saved....");
+			} catch (IOException e) {
+				log("Fail to save progress...");
+				e.printStackTrace();
+			}
+		}
 		
-		log("Saving progress....");
+		
+		
 	}
 	/**
 	 * generate a random number and load as the dimension of the game
@@ -199,5 +279,6 @@ public class MainWindow extends JFrame {
 	 */
 	public void log(String msg) {
 		getLogField().getLogs().append(msg);
+		getLogField().getLogs().append("\n");
 	}
 }
