@@ -8,6 +8,7 @@
  */
 package cst8221.assignment.component;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -16,9 +17,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -66,7 +69,10 @@ public class LogField extends JPanel {
 		loadLogField(window);
 	}
 
-
+	/**
+	 * 
+	 * @param window
+	 */
 	private void loadLogField(MainWindow window) {
 		
 		logs = new JTextArea();
@@ -75,16 +81,26 @@ public class LogField extends JPanel {
 		
 		try {
 			myPicture = ImageIO.read(new File("logo.png"));
-			myPicture.getScaledInstance(200, 120, Image.SCALE_SMOOTH);
+			myPicture.getScaledInstance(180, 120, Image.SCALE_SMOOTH);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		Image imgScaled = myPicture.getScaledInstance(200, 120, Image.SCALE_SMOOTH);
-		JLabel picLabel = new JLabel(new ImageIcon(imgScaled));
+		JButton picLabel = new JButton(new ImageIcon(imgScaled));
+		picLabel.setPreferredSize(new Dimension(180,120));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(picLabel);
+		this.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+		JPanel logoContainer = new JPanel();
+		logoContainer.setLayout(new BoxLayout(logoContainer, BoxLayout.X_AXIS));
+		logoContainer.setPreferredSize(new Dimension(180,120));
+		logoContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+		logoContainer.setAlignmentY(Component.CENTER_ALIGNMENT);
+		logoContainer.add(picLabel);
+		this.add(logoContainer);
+		
 		JPanel modePanel = new JPanel();
 		modePanel.setLayout(new FlowLayout());
 		JLabel modeLabel = new JLabel("Mode: ");

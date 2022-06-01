@@ -30,7 +30,7 @@ import cst8221.assignment.window.MainWindow;
  * This class is //TODO
  * @author Roger Li
  * @author Denys Savskyi
- * @version
+ * @version 1.0.0
  * @see
  * @since
  *
@@ -41,6 +41,10 @@ public class PlayField extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String HARD = "Hard";
+	public static final String MEDIUM = "Medium";
+	public static final String EASY = "Easy";
+	
 	private JButton[][] numberJButtons;
 	private JButton[] numbersToSelect;
 	private Map<String, String> cellsTakenMap;
@@ -57,12 +61,19 @@ public class PlayField extends JPanel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PlayField(MainWindow window) {
-		setSize(window.getWidth() * 625 / 800, window.getHeight());
-		load(window);
-	}
 	/**
 	 * 
+	 * @param window
+	 */
+	public PlayField(MainWindow window) {
+		setSize(590, 680);
+		setPreferredSize(new Dimension(590, 680));
+		load(window);
+	}
+
+	/**
+	 * 
+	 * @param window
 	 * @param dimSelected
 	 */
 	public void reload(MainWindow window, int dimSelected) {
@@ -71,7 +82,7 @@ public class PlayField extends JPanel {
 		this.invalidate();
 		this.validate();
 		this.repaint();
-		window.getLogField().getLogs().append("Game reloading... \n");
+		window.log("Game reloading... \n");
 	}
 	/**
 	 * 
@@ -84,7 +95,16 @@ public class PlayField extends JPanel {
 	 * @param dim
 	 */
 	public void load(MainWindow window, int dim) {
-		this.setPreferredSize(new Dimension(window.getWidth() * 400/640, window.getHeight() * 15/360));
+		load(window, dim, 1);
+	}
+	
+	/**
+	 * 
+	 * @param dim
+	 */
+	//TODO
+	public void load(MainWindow window, int dim, double hiddenRate) {
+		this.setPreferredSize(new Dimension(590, 680));
 		
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		this.setLayout(new GridLayout((int) (Math.pow(dim, 2)) + 1, (int) Math.pow(dim, 2), 1, 1));
@@ -114,16 +134,18 @@ public class PlayField extends JPanel {
 					
 					if (numSelected!=null) {
 						int numRep = -1;
-						if(numSelected.charAt(0) >= 10)
-							numRep = numSelected.charAt(0) - 55;
-						else
+						try {
 							numRep = Integer.parseInt(numSelected);
+						}catch(NumberFormatException ex) {
+							numRep = numSelected.charAt(0) - 55;
+						}
+							
 						boolean available = true;
 						for(String k : cellsTakenMap.keySet()) {
 							System.out.println(k);
 							if(cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) {
 								available = false;
-								window.getLogField().getLogs().append("Invalid try...\n");
+								window.log("Invalid try...\n");
 								//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
 								String soundName = "wrong.wav";  
 								try {
@@ -149,7 +171,7 @@ public class PlayField extends JPanel {
 							numberCounter[numRep-1]++;
 						
 							totalCounter++;
-							window.getLogField().getLogs().append(numSelected + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...\n");
+							window.log(numSelected + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...\n");
 							String soundName = null;
 							if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
 								soundName = "complete.wav"; 
@@ -202,17 +224,36 @@ public class PlayField extends JPanel {
 						b.setBackground(Color.GREEN);
 					}
 				}
-				window.getLogField().getLogs().append("Selected number: " + numSelected + "\n");
+				window.log("Selected number: " + numSelected + "\n");
 			});
 			numbersToSelect[i-1] = btn;
 			this.add(btn);
 		}
 	}
 	
+	/**
+	 * 
+	 * @param level
+	 */
+	//TODO
 	public void setDifficulty(String level) {
-		
+		switch(level) {
+		case HARD:
+			
+			break;
+		case MEDIUM:
+			break;
+		case EASY:
+			break;
+		default:
+			System.err.println("Error happens");
+		}
 	}
 	
+	/**
+	 * 
+	 * @param number
+	 */
 	public void stepComplete(String number) {
 		for(int i=0; i<numberJButtons.length; i++) {
 			for(int j=0; j<numberJButtons[i].length; j++) {
@@ -223,6 +264,9 @@ public class PlayField extends JPanel {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void complete() {
 		for(int i=0; i<numberJButtons.length; i++) {
 			for(int j=0; j<numberJButtons[i].length; j++) {
@@ -232,12 +276,38 @@ public class PlayField extends JPanel {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getNumSelected() {
 		return numSelected;
 	}
 
+	/**
+	 * 
+	 * @param numSelected
+	 */
 	public void setNumSelected(String numSelected) {
 		this.numSelected = numSelected;
 	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public JButton[][] getNumberJButtons() {
+		return numberJButtons;
+	}
+
+	/**
+	 * 
+	 * @param numberJButtons
+	 */
+	public void setNumberJButtons(JButton[][] numberJButtons) {
+		this.numberJButtons = numberJButtons;
+	}
+	
+	
 
 }

@@ -37,11 +37,11 @@ public class Assignment1 {
 	/****************************************************
 	 * Method Name: main
 	 * Purpose: the start point of the program
-	 * Algorithm: //TODO
+	 * Algorithm: launch the program by calling invokelater() method of EventQueue
 	 ***************************************************/
 	/**
 	 * 
-	 * @param args
+	 * @param args command line interactive parameter
 	 */
 
 	public static void main(String[] args) {

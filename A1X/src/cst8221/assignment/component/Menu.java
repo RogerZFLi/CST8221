@@ -37,15 +37,25 @@ public class Menu extends JMenuBar {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 
+	 */
 	public Menu() {
 		
 	}
 	
+	/**
+	 * 
+	 * @param window
+	 */
 	public Menu(MainWindow window) {
 		load(window);
 	}
 	
+	/**
+	 * 
+	 * @param window
+	 */
 	public void loadGameMenu(MainWindow window) {
 		
 		JMenu game = new JMenu("Game");
@@ -82,6 +92,10 @@ public class Menu extends JMenuBar {
 		this.add(game);
 	}
 	
+	/**
+	 * 
+	 * @param window
+	 */
 	public void loadHelpMenu(MainWindow window) {
 		JMenu help = new JMenu("Help");
 		JMenuItem about = new JMenuItem("About");
@@ -105,12 +119,14 @@ public class Menu extends JMenuBar {
 		this.add(help);
 		
 	}
+	/**
+	 * 
+	 * @param window
+	 */
 	public void load(MainWindow window) {
 		
 		loadGameMenu(window);
 		loadHelpMenu(window);
-		
-		
 	}
 
 }

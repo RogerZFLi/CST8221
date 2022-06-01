@@ -22,7 +22,7 @@ import cst8221.assignment.window.MainWindow;
  * This class is //TODO
  * @author Roger Li
  * @author Denys Savskyi
- * @version
+ * @version 1.0.0
  * @see
  * @since
  *
@@ -46,11 +46,17 @@ public class ActionField extends JPanel {
 	public ActionField() {
 		// TODO Auto-generated constructor stub
 	}
-	
+	/**
+	 * 
+	 * @param window
+	 */
 	public ActionField(MainWindow window) {
 		init(window);
 	}
-
+	/**
+	 * 
+	 * @param window
+	 */
 	public void init(MainWindow window) {
 		this.setLayout(new FlowLayout());
 		JLabel dimLabel = new JLabel("Dim: ");
@@ -63,8 +69,8 @@ public class ActionField extends JPanel {
 			window.getPlayField().setNumSelected(null);
 			dimSelected = (Integer)dim.getSelectedItem();
 			window.getPlayField().reload(window, dimSelected);
-			window.getLogField().getLogs().append("Reloading...");
-			window.getLogField().getLogs().append("Dimension number set to :" + dimSelected + "\n");
+			window.log("Reloading...");
+			window.log("Dimension number set to :" + dimSelected + "\n");
 			
 		});
 		this.add(dim);
@@ -72,13 +78,13 @@ public class ActionField extends JPanel {
 		JLabel levelLabel = new JLabel("Level: ");
 		level = new JComboBox<>();
 		level.addItem("Select");
-		level.addItem("Easy");
-		level.addItem("Medium");
-		level.addItem("Hard");
+		level.addItem(PlayField.EASY);
+		level.addItem(PlayField.MEDIUM);
+		level.addItem(PlayField.HARD);
 		level.addActionListener(e->{
 			if(isPlayMode) {
 				window.getPlayField().setDifficulty((String)level.getSelectedItem());
-				window.getLogField().getLogs().append("Set level to '" + level.getSelectedItem() + "'....");
+				window.log("Set level to '" + level.getSelectedItem() + "'....");
 			}
 		});
 		
@@ -113,55 +119,95 @@ public class ActionField extends JPanel {
 		this.add(time);
 	}
 	
+	/**
+	 * 
+	 */
 	public void reset() {
 		if(!isPlayMode) return;
 		point.setText("0");
 		time.setText("0");
 		level.setSelectedItem(0);
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getDimSelected() {
 		return dimSelected;
 	}
 
+	/**
+	 * 
+	 * @param dimSelected
+	 */
 	public void setDimSelected(int dimSelected) {
 		this.dimSelected = dimSelected;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public JComboBox<String> getLevel() {
 		return level;
 	}
 
+	/**
+	 * 
+	 * @param level
+	 */
 	public void setLevel(JComboBox<String> level) {
 		this.level = level;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public JTextField getPoint() {
 		return point;
 	}
 
+	/**
+	 * 
+	 * @param point
+	 */
 	public void setPoint(JTextField point) {
 		this.point = point;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public JTextField getTime() {
 		return time;
 	}
 
+	/**
+	 * 
+	 * @param time
+	 */
 	public void setTime(JTextField time) {
 		this.time = time;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isPlayMode() {
 		return isPlayMode;
 	}
 
+	/**
+	 * 
+	 * @param isPlayMode
+	 */
 	public void setPlayMode(boolean isPlayMode) {
 		this.isPlayMode = isPlayMode;
 	}
-	
-	
-
 }
 
 
