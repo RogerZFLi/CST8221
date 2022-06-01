@@ -93,6 +93,7 @@ public class ActionField extends JPanel {
 		this.add(dim);
 		dimSelected = (Integer)dim.getSelectedItem();
 		JLabel levelLabel = new JLabel("Level: ");
+		Timer t = new Timer();
 		level = new JComboBox<>();
 		level.addItem("Select");
 		level.addItem(PlayField.EASY);
@@ -101,10 +102,10 @@ public class ActionField extends JPanel {
 		level.addActionListener(e->{
 			timerStop = false;
 			reset();
-			second = null;
-			Timer t = new Timer();
+			
 			second = new SecondCounter();
 			t.schedule(second, 1000);
+			
 			
 			window.getPlayField().setDifficulty((String)level.getSelectedItem());
 			window.log("Set level to '" + level.getSelectedItem() + "....");
