@@ -10,6 +10,9 @@ package cst8221.assignment.component;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -40,6 +43,11 @@ public class ActionField extends JPanel {
 	private JTextField time;
 	private boolean isPlayMode;
 	private JButton saveButton, loadButton;
+	private static long timer;
+	private SecondCounter second;
+	private static boolean timerStop;
+	private static boolean timerReset;
+	private static boolean pointReset;
 	
 
 	/**
@@ -60,10 +68,15 @@ public class ActionField extends JPanel {
 	 * @param window
 	 */
 	public void init(MainWindow window) {
+		timer = 0;
 		
 		this.setLayout(new FlowLayout());
 		JLabel dimLabel = new JLabel("Dim: ");
 		this.add(dimLabel);
+		time = new JTextField();
+		time.setEditable(false);
+		time.setText("0");
+		time.setPreferredSize(new Dimension(40, 20));
 		
 		dim.addItem(2);
 		dim.addItem(3);
@@ -86,10 +99,17 @@ public class ActionField extends JPanel {
 		level.addItem(PlayField.MEDIUM);
 		level.addItem(PlayField.HARD);
 		level.addActionListener(e->{
-			if(isPlayMode) {
-				window.getPlayField().setDifficulty((String)level.getSelectedItem());
-				window.log("Set level to '" + level.getSelectedItem() + "'....");
-			}
+			timerStop = false;
+			reset();
+			second = null;
+			Timer t = new Timer();
+			second = new SecondCounter();
+			t.schedule(second, 1000);
+			
+			window.getPlayField().setDifficulty((String)level.getSelectedItem());
+			window.log("Set level to '" + level.getSelectedItem() + "....");
+			
+			
 		});
 		
 		this.add(levelLabel);
@@ -105,7 +125,10 @@ public class ActionField extends JPanel {
 		randButton.addActionListener(e->window.rand());
 		this.add(randButton);
 		JButton resetButton = new JButton("Reset");
-		resetButton.addActionListener(e->window.resetGame());
+		resetButton.addActionListener(e->{
+			window.resetGame();
+			window.log("Resetting game...");
+		});
 		this.add(resetButton);
 		JLabel pointLabel = new JLabel("Points: ");
 		this.add(pointLabel);
@@ -116,10 +139,6 @@ public class ActionField extends JPanel {
 		this.add(point);
 		JLabel timeLabel = new JLabel("Time: ");
 		this.add(timeLabel);
-		time = new JTextField();
-		time.setEditable(false);
-		time.setText("0");
-		time.setPreferredSize(new Dimension(40, 20));
 		this.add(time);
 	}
 	
@@ -131,6 +150,7 @@ public class ActionField extends JPanel {
 		point.setText("0");
 		time.setText("0");
 		level.setSelectedItem(0);
+		timer = 0;
 	}
 	
 	/**
@@ -229,6 +249,54 @@ public class ActionField extends JPanel {
 	}
 	public void setLoadButton(JButton loadButton) {
 		this.loadButton = loadButton;
+	}
+	
+	class SecondCounter extends TimerTask {
+
+		@Override
+		public void run() {
+			while(true) {
+				if(timerStop) break;
+				time.setText(String.valueOf(timer++));
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			timerStop = false;
+			
+			
+		}
+		
+	}
+	
+	public SecondCounter getSecond() {
+		return second;
+	}
+	
+	public static boolean isTimerStop() {
+		return timerStop;
+	}
+	public static void setTimerStop(boolean timerStop) {
+		ActionField.timerStop = timerStop;
+	}
+	public static boolean isTimerReset() {
+		return timerReset;
+	}
+	public static void setTimerReset(boolean timerReset) {
+		ActionField.timerReset = timerReset;
+	}
+	public static boolean isPointReset() {
+		return pointReset;
+	}
+	public static void setPointReset(boolean pointReset) {
+		ActionField.pointReset = pointReset;
+	}
+	public void resetTimer() {
+		timer = 0;
 	}
 	
 	

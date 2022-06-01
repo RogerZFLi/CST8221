@@ -220,6 +220,7 @@ public class PlayField extends JPanel {
 		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
 			soundName = "complete.wav"; 
 			complete();
+			ActionField.setTimerStop(true);
 		}else if(numberCounter[numRep-1]  == dim * dim) {
 			soundName = "goodjob.wav";
 			stepComplete(numSelected);

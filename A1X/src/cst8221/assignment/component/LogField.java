@@ -120,6 +120,8 @@ public class LogField extends JPanel {
 		JRadioButton designRadioButton = new JRadioButton("Design");
 		designRadioButton.addChangeListener(e->{
 			if(designRadioButton.isSelected()) {
+				ActionField.setTimerStop(true);
+				window.getActionField().reset();
 				window.getActionField().setPlayMode(false);
 				window.getActionField().getPoint().setEnabled(false);
 				window.getActionField().getTime().setEnabled(false);
@@ -133,6 +135,8 @@ public class LogField extends JPanel {
 		JRadioButton playRadioButton = new JRadioButton("Play");
 		playRadioButton.addChangeListener(e->{
 			if(playRadioButton.isSelected()) {
+				ActionField.setTimerStop(true);
+				window.getActionField().reset();
 				window.getActionField().setPlayMode(true);
 				window.getActionField().getPoint().setEnabled(true);
 				window.getActionField().getTime().setEnabled(true);

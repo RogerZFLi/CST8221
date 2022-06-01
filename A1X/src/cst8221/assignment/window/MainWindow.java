@@ -92,7 +92,7 @@ public class MainWindow extends JFrame {
 		playField.reload(this, actionField.getDimSelected()==0?2:actionField.getDimSelected());
 		playField.setNumSelected(null);
 		actionField.reset();
-		log("Resetting game...");
+		
 	}
 	
 	public void loadProgress() {
