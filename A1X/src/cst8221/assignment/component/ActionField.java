@@ -34,6 +34,7 @@ public class ActionField extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private int dimSelected;
+	private JComboBox<Integer> dim = new JComboBox<>();
 	private JComboBox<String> level;
 	private JTextField point;
 	private JTextField time;
@@ -61,7 +62,7 @@ public class ActionField extends JPanel {
 		this.setLayout(new FlowLayout());
 		JLabel dimLabel = new JLabel("Dim: ");
 		this.add(dimLabel);
-		JComboBox<Integer> dim = new JComboBox<>();
+		
 		dim.addItem(2);
 		dim.addItem(3);
 		dim.addItem(4);
@@ -208,6 +209,14 @@ public class ActionField extends JPanel {
 	public void setPlayMode(boolean isPlayMode) {
 		this.isPlayMode = isPlayMode;
 	}
+	public JComboBox<Integer> getDim() {
+		return dim;
+	}
+	public void setDim(JComboBox<Integer> dim) {
+		this.dim = dim;
+	}
+	
+	
 }
 
 

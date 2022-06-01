@@ -128,7 +128,7 @@ public class MainWindow extends JFrame {
 	public void rand() {
 		SecureRandom sRandom = new SecureRandom();
 		int num = sRandom.nextInt(3) + 2;
-		this.getPlayField().reload(this, num);
+		this.getActionField().getDim().setSelectedItem(num);
 		log("Randomly selected Dim: " + num + " ....");
 	}
 	/**
