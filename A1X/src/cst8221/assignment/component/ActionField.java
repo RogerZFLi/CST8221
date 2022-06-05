@@ -128,6 +128,8 @@ public class ActionField extends JPanel {
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(e->{
 			window.resetGame();
+			level.setSelectedIndex(0);
+			timerStop = true;
 			window.log("Resetting game...");
 		});
 		this.add(resetButton);
@@ -150,7 +152,8 @@ public class ActionField extends JPanel {
 		if(!isPlayMode) return;
 		point.setText("0");
 		time.setText("0");
-		level.setSelectedItem(0);
+		
+		
 		timer = 0;
 	}
 	
