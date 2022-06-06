@@ -1,10 +1,13 @@
 /**
- * Course  CST 8221 – JAP, Lab Section: 302
+ * File name: Assignment1.java
+ * Roger Li - 040896855 & Denys Savskyi - 041004781
+ * Course  CST 8221 - JAP, Lab Section: 302
  * Assignment: A12
  * Professor: Paulo Sousa
- * Date: May 29, 2022
+ * Date: June 5, 2022
  * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
- * Purpose: //TODO
+ * Purpose:  PlayField.java is used to create a game space where the user can interact and play Sudoku. 
+ * This area is filled with various buttons designed to make the game process easier for the user. Here the user can play and design new variations of Sudoku. 
  */
 package cst8221.assignment.component;
 
@@ -26,20 +29,26 @@ import javax.swing.JPanel;
 
 
 import cst8221.assignment.window.MainWindow;
+
 /**
- * This class is //TODO
+ * Class Name: PlayField
+ * Method List: PlayField(), PlayField(MainWindow window), reload(MainWindow window, int dimSelected), load(MainWindow window), load(MainWindow window, int dim),
+ * load(MainWindow window, int dim, double hiddenRate), fillNumber(MainWindow window, JButton btn, String number, int dim, boolean muted), setDifficulty(String level),
+ * stepComplete(String number), complete(), getNumSelected(), setNumSelected(String numSelected), getNumberJButtons(), setNumberJButtons(JButton[][] numberJButtons)
+ * Constant List: serialVersionUID, HARD, MEDIUM, EASY
+ * Purpose: The PlayField class is used to create a game space where the user can interact and play Sudoku. 
+ * This area is filled with various buttons designed to make the game process easier for the user. Here the user can play and design new variations of Sudoku. 
  * @author Roger Li
- * @author Denys Savskyi
- * @version 1.0.0
- * @see
- * @since
- *
+ * @author Denys Savskyi 
+ * @version Version 2 (2022-06-05)
+ * @see "Extdents: JPanel, Package: cst8221.assignment.component." 
+ * @see "Import Swing and Sound Components: javax.sound.sampled.AudioInputStream; javax.sound.sampled.AudioSystem; javax.sound.sampled.Clip; javax.swing.BorderFactory;
+ * javax.swing.JButton; javax.swing.JPanel;"
+ * @since JDK 18.0.1.1
+ * @since JRE JavaSE-14
  */
 public class PlayField extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final String HARD = "Hard";
 	public static final String MEDIUM = "Medium";
@@ -47,23 +56,27 @@ public class PlayField extends JPanel {
 	
 	private JButton[][] numberJButtons;
 	private JButton[] numbersToSelect;
-	private Map<String, String> cellsTakenMap;
+	private Map<String, String> cellsTakenMap;//creates Map with keys and objects String
 	private String numSelected;
-	private static Map<Integer, String> rowColRepStringMap;
+	private static Map<Integer, String> rowColRepStringMap;//creates Map with Integer keys and objects String
 	private int[] numberCounter;
 	private int totalCounter;
 	
 
 	/**
-	 * 
+	 * Method Name: PlayField
+	 * Purpose: The default constructor of PlayField class
+	 * Algorithm: 
 	 */
 	public PlayField() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * 
-	 * @param window
+	 * Method Name: PlayField
+	 * Purpose: Constructor PlayField is used to set size of the window and load it. 
+	 * Algorithm: 
+	 * @param window - parameter of MainWindow class 
 	 */
 	public PlayField(MainWindow window) {
 		setSize(590, 680);
@@ -72,9 +85,11 @@ public class PlayField extends JPanel {
 	}
 
 	/**
-	 * 
-	 * @param window
-	 * @param dimSelected
+	 * Method Name: reload
+	 * Purpose: Method reload is used to create window with selected dimension if reloaded. 
+	 * Algorithm: 
+	 * @param window - parameter of MainWindow class
+	 * @param dimSelected - integer parameter of selected simension 
 	 */
 	public void reload(MainWindow window, int dimSelected) {
 		this.removeAll();
@@ -84,41 +99,60 @@ public class PlayField extends JPanel {
 		this.repaint();
 		window.log("Game reloading... ");
 	}
+	
 	/**
-	 * 
+	 * Method Name: load
+	 * Purpose: Method load(MainWindow window) is used to load the game with the default second dimension. 
+	 * Algorithm: 
+	 * @param window - parameter of MainWindow class. 
 	 */
 	public void load(MainWindow window) {
 		load(window, 2);
 	}
+	
 	/**
-	 * 
-	 * @param dim
+	 * Method Name: load
+	 * Purpose: Method load(MainWindow window, int dim) is used to load the game with the selected dim and hidrate. 
+	 * Algorithm: 
+	 * @param window - parameter of MainWindow class. 
+	 * @param dim - integer parameter of selected dimension 
 	 */
 	public void load(MainWindow window, int dim) {
 		load(window, dim, 1);
 	}
 	
 	/**
+	 * Method Name: load
+	 * Purpose: This method is used to set Grid Layout with the selected dimension. Create all the buttons for the game 
+	 * Algorithm: Sets preferred size and layout with respect to selected dimension, creates HashMap and counter.
+	 * Then uses for loop to go through and put the values to the HashMap. Uses nested for loops to go through it.
+	 * Then create button objects and set name by getting the values from HashMap. Add Action Listener. 
+	 * Create for loop to go through and print keys. Checks if the user is selecting the correct location. 
+	 * If yes (incorrect) then sets the flag to false and prints the error. If correct, calls fillNumber method with the appropriate values. 
 	 * 
-	 * @param dim
+	 * The next for loop is used to configure the buttons that user is going to use to fill the values. Creates the buttons with the numbers and letter if needed. 
+	 * And creates Action Listener. And uses Yellow color for selected button and Green color for the rest of the buttons with the help of for loop. 
+	 * @param window - parameter of class MainWindow
+	 * @param dim - integer parameter for the dimension 
+	 * @param hiddenRate - double parameter for hidden rate 
 	 */
-	//TODO
-	public void load(MainWindow window, int dim, double hiddenRate) {
+	public void load(MainWindow window, int dim, double hiddenRate) {  //TODO
 		this.setPreferredSize(new Dimension(590, 680));
 		
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.setLayout(new GridLayout((int) (Math.pow(dim, 2)) + 1, (int) Math.pow(dim, 2), 1, 1));
-		numberJButtons = new JButton[(int) (Math.pow(dim, 2))][(int) (Math.pow(dim, 2))];
-		numbersToSelect = new JButton[(int) (Math.pow(dim, 2))];
+		this.setLayout(new GridLayout((int) (Math.pow(dim, 2)) + 1, (int) Math.pow(dim, 2), 1, 1));//sets Grid layouts with respect to selected dimension 
+		numberJButtons = new JButton[(int) (Math.pow(dim, 2))][(int) (Math.pow(dim, 2))];//creates buttons 
+		numbersToSelect = new JButton[(int) (Math.pow(dim, 2))];//creates buttons for user to select 
 		cellsTakenMap = new HashMap<>();
 		rowColRepStringMap = new HashMap<>();
 		numberCounter = new int[(int)Math.pow(dim, 2)];
 		totalCounter = 0;
+		
 		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
 			if(i>9) {
-				rowColRepStringMap.put(i, Character.toString('A' + i - 10));
+				rowColRepStringMap.put(i, Character.toString('A' + i - 10));//puts to HasMap if number is larger then 9 (letters) 
 			}else {
-				rowColRepStringMap.put(i, String.valueOf(i));
+				rowColRepStringMap.put(i, String.valueOf(i));//puts number to HashMap
 			}
 		}
 		for (int i = 0; i < (int) (Math.pow(dim, 2)); i++) {
@@ -196,6 +230,18 @@ public class PlayField extends JPanel {
 		}
 	}
 	
+	/**
+	 * Method Name: fillNumber
+	 * Purpose: Method fillNumber() is used to implement the functionality of the buttons to set the selected by user values for the game. 
+	 * Algorithm: This method checks if button is not null and sets the appropriate number and color (cyan) for the specific button and increments counter. 
+	 * After that it prints the message in the history panel. Then checks if the board is finished and plays the "complete" sound.
+	 * Then checks if the step is completed and plays the "good job" sound. If only one is correct, plays "correct" sound.    
+	 * @param window - parameter of class MainWindow 
+	 * @param btn - button
+	 * @param number - String parameter 
+	 * @param dim - integer parameter of the dimension 
+	 * @param muted - boolean parameter
+	 */
 	public void fillNumber(MainWindow window, JButton btn, String number, int dim, boolean muted) {
 		int numRep = -1;
 		try {
@@ -204,24 +250,24 @@ public class PlayField extends JPanel {
 			numRep = number.charAt(0) - 55;
 		}
 		
-		if(btn.getText()!=null)	{
+		if(btn.getText()!=null)	{//checks if button is not null 
 			numberCounter[numRep-1]--;
 			totalCounter--;
 		}
 		btn.setText(number);
-		btn.setBackground(Color.CYAN);
+		btn.setBackground(Color.CYAN);//sets the background color 
 		cellsTakenMap.put(btn.getName(), numSelected);
 		
-		numberCounter[numRep-1]++;
-	
+		numberCounter[numRep-1]++;//increments counter 
 		totalCounter++;
-		window.log(number + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...");
+		
+		window.log(number + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...");//displays logs 
 		String soundName = null;
-		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {
+		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {//checks if the game is completed 
 			soundName = "complete.wav"; 
-			complete();
+			complete();//calls complete method 
 			ActionField.setTimerStop(true);
-		}else if(numberCounter[numRep-1]  == dim * dim) {
+		}else if(numberCounter[numRep-1]  == dim * dim) {//checks if the whole step is completed 
 			soundName = "goodjob.wav";
 			stepComplete(numSelected);
 		}
@@ -240,11 +286,12 @@ public class PlayField extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param level
+	 * Method Name: setDifficulty
+	 * Purpose: Method setDifficulty() is used to set specific level of difficulty selected bu the user. 
+	 * Algorithm: 
+	 * @param level - String parameter level of difficulty selected by user. 
 	 */
-	//TODO
-	public void setDifficulty(String level) {
+	public void setDifficulty(String level) {  //TODO
 		switch(level) {
 		case HARD:
 			
@@ -259,8 +306,10 @@ public class PlayField extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param number
+	 * Method Name: stepComplete
+	 * Purpose: Method stepComplete() is used to set background color to Blue if the one digit is finished.
+	 * Algorithm: Method stepComplete() uses nested loops to check if one digit is finished and sets Background color to Blue. 
+	 * @param number - 
 	 */
 	public void stepComplete(String number) {
 		for(int i=0; i<numberJButtons.length; i++) {
@@ -273,7 +322,9 @@ public class PlayField extends JPanel {
 	}
 	
 	/**
-	 * 
+	 * Method Name: complete
+	 * Purpose: Method complete() is used to set background color to Pink and sets to not enabled mode if the game is finished.  
+	 * Algorithm: Method complete() uses nested loops to check if the game is completed and sets Background color to Pink. 
 	 */
 	public void complete() {
 		for(int i=0; i<numberJButtons.length; i++) {
@@ -285,32 +336,40 @@ public class PlayField extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Method Name: getNumSelected
+	 * Purpose: Method getNumSelected() of class ActionField gets the value of the variable numSelected
+	 * Algorithm: 
+	 * @return numSelected - parameter that returns the actual value of the variable 
 	 */
 	public String getNumSelected() {
 		return numSelected;
 	}
 
 	/**
-	 * 
-	 * @param numSelected
+	 * Method Name: setNumSelected
+	 * Purpose: Setter method setNumSelected() takes the param and assigns it to the variable numSelected.
+	 * Algorithm: 
+	 * @param numSelected - Parameter menu of class String - sets the variable.
 	 */
 	public void setNumSelected(String numSelected) {
 		this.numSelected = numSelected;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Method Name: getNumberJButtons
+	 * Purpose: Method getNumberJButtons() of class ActionField gets the value of the variable numberJButtons
+	 * Algorithm: 
+	 * @return numberJButtons - parameter that returns the actual value of the variable 
 	 */
 	public JButton[][] getNumberJButtons() {
 		return numberJButtons;
 	}
 
 	/**
-	 * 
-	 * @param numberJButtons
+	 * Method Name: setNumberJButtons
+	 * Purpose: Setter method setNumberJButtons() takes the param and assigns it to the variable numberJButtons.
+	 * Algorithm: 
+	 * @param numberJButtons - Parameter menu of class JButton - sets the variable.
 	 */
 	public void setNumberJButtons(JButton[][] numberJButtons) {
 		this.numberJButtons = numberJButtons;
