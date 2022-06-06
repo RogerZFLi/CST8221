@@ -1,10 +1,13 @@
 /**
- * Course  CST 8221 – JAP, Lab Section: 302
+ * File name: Assignment1.java
+ * Roger Li - 040896855 & Denys Savskyi - 041004781
+ * Course  CST 8221 - JAP, Lab Section: 302
  * Assignment: A12
  * Professor: Paulo Sousa
- * Date: May 29, 2022
+ * Date: June 5, 2022
  * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
- * Purpose: //TODO
+ * Purpose:  LogField.java is used to implement the functionality of the history panel. This field will display logs about every user action. 
+ * Show possible errors. Allows you to set and get all the logs.
  */
 package cst8221.assignment.component;
 
@@ -33,47 +36,69 @@ import javax.swing.JTextArea;
 import cst8221.assignment.window.MainWindow;
 
 /**
- * This class is //TODO
+ * Class Name: LogField
+ * Method List: getLogs(), setLogs(JTextArea logs), LogField(), LogField(MainWindow window), loadLogField(MainWindow window)
+ * Constant List: serialVersionUID
+ * Purpose: Class LogField is used to implement the functionality of the history panel. This field will display logs about every user action. 
+ * Show possible errors. Allows you to set and get all the logs.
  * @author Roger Li
  * @author Denys Savskyi
- * @version
- * @see
- * @since
- *
+ * @version Version 2 (2022-06-05)
+ * @see "Import Swing Components: javax.swing.BorderFactory; javax.swing.BoxLayout; javax.swing.ButtonGroup; javax.swing.ImageIcon; javax.swing.JButton;
+ * javax.swing.JDialog; javax.swing.JLabel; javax.swing.JPanel; javax.swing.JRadioButton; javax.swing.JScrollPane; javax.swing.JTextArea;"
+ * @see "Extdents: JPanel, Package: cst8221.assignment.component;"
+ * @since JDK 18.0.1.1
+ * @since JRE JavaSE-14
  */
 public class LogField extends JPanel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextArea logs;
 
+	/**
+	 * Method Name: getLogs
+	 * Purpose: Method getLogs() of class JTextArea gets the value of the variable logs 
+	 * Algorithm: 
+	 * @return logs - parameter that returns the actual value of the variable 
+	 */
 	public JTextArea getLogs() {
 		return logs;
 	}
-
+	
+	/**
+	 * Method Name: setLogs
+	 * Purpose: Setter method setLogs() takes the param and assigns it to the variable logs. 
+	 * Algorithm: 
+	 * @param logs - Parameter logs of class JTextArea - sets the variable. 
+	 */
 	public void setLogs(JTextArea logs) {
 		this.logs = logs;
 	}
 
 	/**
-	 * 
+	 * Method Name: LogField
+	 * Purpose: 
+	 * Algorithm: 
 	 */
 	public LogField() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param window
+	 * Method Name: LogField
+	 * Purpose: Method LogField(MainWindow window) is used to receive window as a parameter and load log field. 
+	 * Algorithm: 
+	 * @param window - parameter of class MainWindow
 	 */
 	public LogField(MainWindow window) {
 		loadLogField(window);
 	}
 
 	/**
-	 * 
-	 * @param window
+	 * Method Name: loadLogField
+	 * Purpose: 
+	 * Algorithm: 
+	 * @param window - 
 	 */
 	private void loadLogField(MainWindow window) {
 		
