@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -169,6 +171,77 @@ public class MainWindow extends JFrame {
 				log("Progress loaded....");
 			} catch (IOException e) {
 				log("Fail to load progress...");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Method Name: loadMasked
+	 * Purpose: Method loadMasked() is used to Load game with masked numbers based on difficulty level selected. 
+	 * Algorithm: Uses JFileChooser to select the file, chooses the file and uses scanner to scan the details of the game, then sets all these details 
+	 * to actual Sudoku game. Catches the errors. 
+	 */
+	public void loadMasked(String difficulty, int dim) {
+		
+		log("Loading game ...");
+		double maskRate = 0;
+		switch(difficulty) {
+			case PlayField.EASY:
+				maskRate = 0.25;
+				break;
+			case PlayField.MEDIUM:
+				maskRate = 0.5;
+				break;
+			case PlayField.HARD:
+				maskRate = 0.75;
+				break;
+			default:
+				System.err.println("Error happened");
+		}
+		File fileToRead = new File("Level/" + dim);
+		
+		//Read progress from file
+		if(fileToRead!=null) {
+			try (Scanner scanner = new Scanner(fileToRead)){
+
+				JButton[][] btns = getPlayField().getNumberJButtons();
+				//generate musked buttons
+				HashSet<JButton> maskedButtons = new HashSet<>();
+				for(int i=0; i<dim; i++) {
+					for(int j=0; j<dim; j++) {
+						int maskCounter = 0;
+						ArrayList<JButton> buttons = this.getPlayField().getDimBlocks()[i][j].getButtons();
+						SecureRandom sr = new SecureRandom();
+						int indexToMask = -1;
+						do {
+							indexToMask = sr.nextInt(dim*dim);
+							if(maskedButtons.contains(buttons.get(indexToMask))) {
+								continue;
+							}
+							maskedButtons.add(buttons.get(indexToMask));
+							maskCounter++;
+						}while((double)maskCounter/(dim*dim)<maskRate);	
+					}
+				}
+				//load solution with masked numbers
+				for(int i=0; i<btns.length; i++) {
+					String line = null;
+					if(scanner.hasNext()) {
+						line = scanner.nextLine();
+						String[] numbers = line.split(",");
+						for(int j=0; j<btns[i].length; j++) {
+							if(!numbers[j].isBlank()) {
+								if(!maskedButtons.contains(btns[i][j]))
+									this.getPlayField().fillNumber(this, btns[i][j], numbers[j], dim,true);
+							}
+						}
+					}
+				}
+				
+				log(difficulty + " mode loaded....");
+			} catch (IOException e) {
+				log("Fail to load " + difficulty + " mode...");
 				e.printStackTrace();
 			}
 		}

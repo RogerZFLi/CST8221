@@ -17,6 +17,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,13 @@ public class PlayField extends JPanel {
 	private static Map<Integer, String> rowColRepStringMap;//creates Map with Integer keys and objects String
 	private int[] numberCounter;
 	private int totalCounter;
-	
+	private DimBlock[][] dimBlocks;
+	private static final int STANDARD_POINT_EVERY_FILL = 10;
+	private static final int POINT_ADJUSTMENT_ON_TIME = 5;
+	private static int pointForThisFill = 0;
+	private static long totalPoint = 0;
+	private static Date fillStart;
+	private static Date fillEnd;
 
 	/**
 	 * Method Name: PlayField
@@ -97,7 +104,7 @@ public class PlayField extends JPanel {
 		this.invalidate();
 		this.validate();
 		this.repaint();
-		window.log("Game reloading... ");
+//		window.log("Game reloading... ");
 	}
 	
 	/**
@@ -136,7 +143,7 @@ public class PlayField extends JPanel {
 	 * @param dim - integer parameter for the dimension 
 	 * @param hiddenRate - double parameter for hidden rate 
 	 */
-	public void load(MainWindow window, int dim, double hiddenRate) {  //TODO
+	public void load(MainWindow window, int dim, double showRate) {  //TODO
 		this.setPreferredSize(new Dimension(590, 680));
 		
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -147,7 +154,9 @@ public class PlayField extends JPanel {
 		rowColRepStringMap = new HashMap<>();
 		numberCounter = new int[(int)Math.pow(dim, 2)];
 		totalCounter = 0;
-		
+		dimBlocks = new DimBlock[dim][dim];
+		fillStart = new Date();
+		totalPoint = 0;
 		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
 			if(i>9) {
 				rowColRepStringMap.put(i, Character.toString('A' + i - 10));//puts to HasMap if number is larger then 9 (letters) 
@@ -155,6 +164,7 @@ public class PlayField extends JPanel {
 				rowColRepStringMap.put(i, String.valueOf(i));//puts number to HashMap
 			}
 		}
+		
 		for (int i = 0; i < (int) (Math.pow(dim, 2)); i++) {
 			for (int j = 0; j < (int) (Math.pow(dim, 2)); j++) {
 				
@@ -190,10 +200,19 @@ public class PlayField extends JPanel {
 						}
 						if(available) {
 							fillNumber(window, btn, numSelected, dim, false);
+							fillEnd= new Date();
+							@SuppressWarnings("deprecation")
+							int secondTaken = fillEnd.getSeconds() - fillStart.getSeconds();
+							pointForThisFill = STANDARD_POINT_EVERY_FILL * POINT_ADJUSTMENT_ON_TIME / secondTaken;
+							totalPoint += pointForThisFill;
+							if(window.getActionField().isPlayMode()) window.getActionField().getPoint().setText(String.valueOf(totalPoint));
+							fillStart = new Date();
 						}
 					}
 				});
 				numberJButtons[i][j] = btn;
+				if(dimBlocks[i/dim][j/dim]==null) dimBlocks[i/dim][j/dim] = new DimBlock(dim);
+				dimBlocks[i/dim][j/dim].addButton(btn);
 				this.add(btn);
 			}
 		}
@@ -244,6 +263,7 @@ public class PlayField extends JPanel {
 	 */
 	public void fillNumber(MainWindow window, JButton btn, String number, int dim, boolean muted) {
 		int numRep = -1;
+		String originalNumber = null;
 		try {
 			numRep = Integer.parseInt(number);
 		}catch(NumberFormatException ex) {
@@ -253,10 +273,12 @@ public class PlayField extends JPanel {
 		if(btn.getText()!=null)	{//checks if button is not null 
 			numberCounter[numRep-1]--;
 			totalCounter--;
+			originalNumber = btn.getText();
+			revertToUncomplete(originalNumber);
 		}
 		btn.setText(number);
-		btn.setBackground(Color.CYAN);//sets the background color 
-		cellsTakenMap.put(btn.getName(), numSelected);
+		if(!muted) btn.setBackground(Color.CYAN);//sets the background color 
+		cellsTakenMap.put(btn.getName(), number);
 		
 		numberCounter[numRep-1]++;//increments counter 
 		totalCounter++;
@@ -265,11 +287,11 @@ public class PlayField extends JPanel {
 		String soundName = null;
 		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {//checks if the game is completed 
 			soundName = "complete.wav"; 
-			complete();//calls complete method 
+			if(!muted) complete();//calls complete method 
 			ActionField.setTimerStop(true);
 		}else if(numberCounter[numRep-1]  == dim * dim) {//checks if the whole step is completed 
 			soundName = "goodjob.wav";
-			stepComplete(numSelected);
+			if(!muted) stepComplete(number);
 		}
 		else
 			soundName = "correct.wav";  
@@ -317,6 +339,19 @@ public class PlayField extends JPanel {
 				if(numberJButtons[i][j].getText()!=null && numberJButtons[i][j].getText().equals(number)) {
 					numberJButtons[i][j].setBackground(Color.BLUE);
 				}
+				
+			}
+		}
+	}
+	
+	public void revertToUncomplete(String number) {
+		for(int i=0; i<numberJButtons.length; i++) {
+			for(int j=0; j<numberJButtons[i].length; j++) {
+				if(number!=null) {
+					if(numberJButtons[i][j].getText()!=null && numberJButtons[i][j].getText().equals(number)) {
+						numberJButtons[i][j].setBackground(Color.CYAN);
+					}
+				}
 			}
 		}
 	}
@@ -332,6 +367,9 @@ public class PlayField extends JPanel {
 				numberJButtons[i][j].setBackground(Color.PINK);
 				numberJButtons[i][j].setEnabled(false);;
 			}
+		}
+		for(int i=0; i<numbersToSelect.length; i++) {
+			numbersToSelect[i].setBackground(Color.GREEN);
 		}
 	}
 	
@@ -373,6 +411,18 @@ public class PlayField extends JPanel {
 	 */
 	public void setNumberJButtons(JButton[][] numberJButtons) {
 		this.numberJButtons = numberJButtons;
+	}
+
+	public DimBlock[][] getDimBlocks() {
+		return dimBlocks;
+	}
+
+	public Map<String, String> getCellsTakenMap() {
+		return cellsTakenMap;
+	}
+
+	public void setCellsTakenMap(Map<String, String> cellsTakenMap) {
+		this.cellsTakenMap = cellsTakenMap;
 	}
 	
 	

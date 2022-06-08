@@ -77,8 +77,8 @@ public class LogField extends JPanel {
 
 	/**
 	 * Method Name: LogField
-	 * Purpose: 
-	 * Algorithm: 
+	 * Purpose: Default constructor
+	 * Algorithm: No arg constructor
 	 */
 	public LogField() {
 		// TODO Auto-generated constructor stub
@@ -96,9 +96,9 @@ public class LogField extends JPanel {
 
 	/**
 	 * Method Name: loadLogField
-	 * Purpose: 
-	 * Algorithm: 
-	 * @param window - 
+	 * Purpose: Loads the log text field (scroll panel) to log field pane
+	 * Algorithm: Adds the log text field and mode radio buttons to log field pane
+	 * @param window - The main window to display
 	 */
 	private void loadLogField(MainWindow window) {
 		
@@ -143,6 +143,7 @@ public class LogField extends JPanel {
 		modePanel.setLayout(new FlowLayout());
 		JLabel modeLabel = new JLabel("Mode: ");
 		JRadioButton designRadioButton = new JRadioButton("Design");
+		designRadioButton.setSelected(true);
 		designRadioButton.addChangeListener(e->{
 			if(designRadioButton.isSelected()) {
 				ActionField.setTimerStop(true);
@@ -150,9 +151,11 @@ public class LogField extends JPanel {
 				window.getActionField().setPlayMode(false);
 				window.getActionField().getPoint().setEnabled(false);
 				window.getActionField().getTime().setEnabled(false);
+				window.getActionField().getLevel().setSelectedIndex(0);
 				window.getActionField().getLevel().setEnabled(false);
 				window.getActionField().getSaveButton().setEnabled(false);
 				window.getActionField().getLoadButton().setEnabled(false);
+				window.resetGame();
 				
 			}
 		});

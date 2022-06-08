@@ -36,19 +36,12 @@ import cst8221.assignment.window.MainWindow;
  * In this part of the application, the user can see most of the Sudoku game settings.
  * @author Roger Li
  * @author Denys Savskyi
-<<<<<<< HEAD
- * @version 1.0.0
- * @see
- * @see
- * @since
  *
-=======
  * @version Version 2 (2022-06-05)
  * @see "Import Swing Components: javax.swing.JButton; javax.swing.JComboBox; javax.swing.JLabel; javax.swing.JPanel; javax.swing.JTextField;"
  * @see "Extdents: JPanel, Package: cst8221.assignment.component;"
  * @since JDK 18.0.1.1
  * @since JRE JavaSE-14
->>>>>>> roger/master
  */
 public class ActionField extends JPanel {
 
@@ -88,8 +81,8 @@ public class ActionField extends JPanel {
 
 	/**
 	 * Method Name: init
-	 * Purpose: 
-	 * Algorithm: 
+	 * Purpose: Loads all the components on Action Field.
+	 * Algorithm: Adds all the components
 	 * @param window - parameter of MainWindow class.
 	 */
 	public void init(MainWindow window) {
@@ -114,7 +107,7 @@ public class ActionField extends JPanel {
 			window.log("Dimension number set to :" + dimSelected);
 
 		});
-
+		
 		this.add(dim);
 		dimSelected = (Integer) dim.getSelectedItem();
 		JLabel levelLabel = new JLabel("Level: ");
@@ -131,8 +124,8 @@ public class ActionField extends JPanel {
 			if (!level.getSelectedItem().equals("Select")) {
 				second = new SecondCounter();
 				t.schedule(second, 1000);
-
-				window.getPlayField().setDifficulty((String) level.getSelectedItem());
+				window.resetGame();
+				window.loadMasked((String) level.getSelectedItem(), dimSelected);
 				window.log("Set level to '" + level.getSelectedItem() + "....");
 			}
 
