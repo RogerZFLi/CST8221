@@ -125,7 +125,8 @@ public class ActionField extends JPanel {
 				second = new SecondCounter();
 				t.schedule(second, 1000);
 				window.resetGame();
-				window.loadMasked((String) level.getSelectedItem(), dimSelected);
+				if(!window.isFromFile())
+					window.loadMasked((String) level.getSelectedItem(), dimSelected);
 				window.log("Set level to '" + level.getSelectedItem() + "....");
 			}
 

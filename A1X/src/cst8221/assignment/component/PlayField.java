@@ -17,7 +17,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,8 +67,8 @@ public class PlayField extends JPanel {
 	private static final int POINT_ADJUSTMENT_ON_TIME = 5;
 	private static int pointForThisFill = 0;
 	private static long totalPoint = 0;
-	private static Date fillStart;
-	private static Date fillEnd;
+	private static LocalDateTime fillStart;
+	private static LocalDateTime fillEnd;
 
 	/**
 	 * Method Name: PlayField
@@ -155,7 +155,7 @@ public class PlayField extends JPanel {
 		numberCounter = new int[(int)Math.pow(dim, 2)];
 		totalCounter = 0;
 		dimBlocks = new DimBlock[dim][dim];
-		fillStart = new Date();
+		fillStart = LocalDateTime.now();
 		totalPoint = 0;
 		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
 			if(i>9) {
@@ -200,13 +200,12 @@ public class PlayField extends JPanel {
 						}
 						if(available) {
 							fillNumber(window, btn, numSelected, dim, false);
-							fillEnd= new Date();
-							@SuppressWarnings("deprecation")
-							int secondTaken = fillEnd.getSeconds() - fillStart.getSeconds();
-							pointForThisFill = STANDARD_POINT_EVERY_FILL * POINT_ADJUSTMENT_ON_TIME / secondTaken;
+							fillEnd= LocalDateTime.now();
+							int secondTaken = fillEnd.toLocalTime().toSecondOfDay() - fillStart.toLocalTime().toSecondOfDay();
+							pointForThisFill = calculatePointOfCurrentFill(secondTaken);
 							totalPoint += pointForThisFill;
 							if(window.getActionField().isPlayMode()) window.getActionField().getPoint().setText(String.valueOf(totalPoint));
-							fillStart = new Date();
+							fillStart = LocalDateTime.now();
 						}
 					}
 				});
@@ -249,6 +248,15 @@ public class PlayField extends JPanel {
 		}
 	}
 	
+	private static int calculatePointOfCurrentFill(int secondTaken) {
+		double currentPointDec = STANDARD_POINT_EVERY_FILL * (double) (POINT_ADJUSTMENT_ON_TIME / secondTaken);
+		int currentPointInt = 0;
+		if(currentPointDec<1) currentPointInt = 1;
+		else currentPointInt = (int) currentPointDec;
+		
+		return currentPointInt;
+	}
+
 	/**
 	 * Method Name: fillNumber
 	 * Purpose: Method fillNumber() is used to implement the functionality of the buttons to set the selected by user values for the game. 

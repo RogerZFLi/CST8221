@@ -75,7 +75,7 @@ public class Menu extends JMenuBar {
 		
 		JMenuItem newGame = new JMenuItem("New");
 		newGame.addActionListener(e->{
-			window.loadRootPane();
+			window.resetGame();
 		});
 		game.add(newGame);
 		JMenuItem open = new JMenuItem("Open");

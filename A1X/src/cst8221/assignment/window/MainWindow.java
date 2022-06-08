@@ -59,6 +59,7 @@ public class MainWindow extends JFrame {
 	private ActionField actionField;
 	private LogField logField;
 	private Menu menu;
+	private boolean isFromFile;
 	
 	/**
 	 * Method Name: MainWindow
@@ -130,7 +131,8 @@ public class MainWindow extends JFrame {
 	public void loadProgress() {
 		
 		log("Loading progress....");
-		
+		isFromFile = true;
+		this.getLogField().getPlayRadioButton().setSelected(true);
 		//Open current project folder location to save file
 		JFileChooser fileChooser = new JFileChooser(".");
 		fileChooser.setDialogTitle("Specify a file to load");   
@@ -410,5 +412,13 @@ public class MainWindow extends JFrame {
 	public void log(String msg) {
 		getLogField().getLogs().append(msg);
 		getLogField().getLogs().append("\n");
+	}
+
+	public boolean isFromFile() {
+		return isFromFile;
+	}
+
+	public void setFromFile(boolean isFromFile) {
+		this.isFromFile = isFromFile;
 	}
 }

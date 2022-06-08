@@ -54,6 +54,7 @@ public class LogField extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private JTextArea logs;
+	private JRadioButton playRadioButton;
 
 	/**
 	 * Method Name: getLogs
@@ -160,7 +161,7 @@ public class LogField extends JPanel {
 			}
 		});
 		
-		JRadioButton playRadioButton = new JRadioButton("Play");
+		playRadioButton = new JRadioButton("Play");
 		playRadioButton.addChangeListener(e->{
 			if(playRadioButton.isSelected()) {
 				ActionField.setTimerStop(true);
@@ -185,6 +186,14 @@ public class LogField extends JPanel {
 		logArea.setPreferredSize(new Dimension(200, 300));
 		this.add(logArea);
 		
+	}
+
+	public JRadioButton getPlayRadioButton() {
+		return playRadioButton;
+	}
+
+	public void setPlayRadioButton(JRadioButton playRadioButton) {
+		this.playRadioButton = playRadioButton;
 	}
 
 }
