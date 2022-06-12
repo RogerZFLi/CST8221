@@ -16,7 +16,7 @@ import cst8221.assignment.window.MainWindow;
 
 
 /**
- * Class Name: Assignment1
+ * Class Name: Assignment12
  * Method List: main()
  * Constant List: N/A
  * Purpose: Class Assignment1 is used to invoke the GUI game of Sudoku 
@@ -27,7 +27,7 @@ import cst8221.assignment.window.MainWindow;
  * @since JDK 18.0.1.1
  * @since JRE JavaSE-14
  */
-public class Assignment1 { 
+public class Assignment12 { 
 	
 	/**
 	 * Method Name: main
