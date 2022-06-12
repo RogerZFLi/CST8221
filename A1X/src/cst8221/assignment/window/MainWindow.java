@@ -68,7 +68,7 @@ public class MainWindow extends JFrame {
 	 * @throws HeadlessException - trown if called in the env that does not support devices such as mouse, keyboard. 
 	 */
 	public MainWindow() throws HeadlessException {
-		this("Sudoku (Roger Li, Denys Savasyi)");
+		this("Sudoku (Roger Li, Denys Savskyi)");
 	}
 
 	/**
