@@ -141,9 +141,9 @@ public class PlayField extends JPanel {
 	 * And creates Action Listener. And uses Yellow color for selected button and Green color for the rest of the buttons with the help of for loop. 
 	 * @param window - parameter of class MainWindow
 	 * @param dim - integer parameter for the dimension 
-	 * @param hiddenRate - double parameter for hidden rate 
+	 * @param showRate - double parameter for hidden rate 
 	 */
-	public void load(MainWindow window, int dim, double showRate) {  //TODO
+	public void load(MainWindow window, int dim, double showRate) {
 		this.setPreferredSize(new Dimension(590, 680));
 		
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

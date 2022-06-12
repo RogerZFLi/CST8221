@@ -187,11 +187,23 @@ public class LogField extends JPanel {
 		this.add(logArea);
 		
 	}
-
+	
+	/**
+	 * Method Name: getPlayRadioButton
+	 * Purpose: Method getPlayRadioButton() is used to return the variable playRadioButton 
+	 * Algorithm: 
+	 * @return playRadioButton - returns parameter play radio button 
+	 */
 	public JRadioButton getPlayRadioButton() {
 		return playRadioButton;
 	}
 
+	/**
+	 * Method Name: setPlayRadioButton
+	 * Purpose: Method setPlayRadioButton(JRadioButton playRadioButton) is used to set the radio button  
+	 * Algorithm: 
+	 * @param playRadioButton - parameter of class JRadioButton
+	 */
 	public void setPlayRadioButton(JRadioButton playRadioButton) {
 		this.playRadioButton = playRadioButton;
 	}

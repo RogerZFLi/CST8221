@@ -82,7 +82,7 @@ public class ActionField extends JPanel {
 	/**
 	 * Method Name: init
 	 * Purpose: Loads all the components on Action Field.
-	 * Algorithm: Adds all the components
+	 * Algorithm: Adds all the components of action field panel and load it to the main window
 	 * @param window - parameter of MainWindow class.
 	 */
 	public void init(MainWindow window) {
@@ -93,16 +93,16 @@ public class ActionField extends JPanel {
 		this.add(dimLabel);
 		time = new JTextField();
 		time.setEditable(false);
-		time.setText("0");
-		time.setPreferredSize(new Dimension(40, 20));
+		time.setText("0");//set the default text to 0 for the timer 
+		time.setPreferredSize(new Dimension(40, 20));//set the size 
 
-		dim.addItem(2);
+		dim.addItem(2);//add items for dimension 2,3,4
 		dim.addItem(3);
 		dim.addItem(4);
-		dim.addActionListener(e -> {
+		dim.addActionListener(e -> {//creates action listener on dimension 
 			window.getPlayField().setNumSelected(null);
-			dimSelected = (Integer) dim.getSelectedItem();
-			window.getPlayField().reload(window, dimSelected);
+			dimSelected = (Integer) dim.getSelectedItem();//sets the var dimSelected with the value of selected item
+			window.getPlayField().reload(window, dimSelected);//reloads window with the game with the proper dim 
 			window.log("Reloading...");
 			window.log("Dimension number set to :" + dimSelected);
 
@@ -114,18 +114,18 @@ public class ActionField extends JPanel {
 		Timer t = new Timer();
 		level = new JComboBox<>();
 		level.addItem("Select");
-		level.addItem(PlayField.EASY);
+		level.addItem(PlayField.EASY);//adds Easy,medium and hard items of class PlayField 
 		level.addItem(PlayField.MEDIUM);
 		level.addItem(PlayField.HARD);
-		level.addActionListener(e -> {
+		level.addActionListener(e -> {//creates action listener 
 			
 			timerStop = false;
 			reset();
-			if (!level.getSelectedItem().equals("Select")) {
-				second = new SecondCounter();
+			if (!level.getSelectedItem().equals("Select")) {//checks if selected item is equal to "select" returns false then 
+				second = new SecondCounter();//creates object of class SecondCounter 
 				t.schedule(second, 1000);
-				window.resetGame();
-				if(!window.isFromFile())
+				window.resetGame();//resets the game of Sudoku 
+				if(!window.isFromFile())//checks if object window is not from file 
 					window.loadMasked((String) level.getSelectedItem(), dimSelected);
 				window.log("Set level to '" + level.getSelectedItem() + "....");
 			}
@@ -135,7 +135,7 @@ public class ActionField extends JPanel {
 		this.add(levelLabel);
 		this.add(level);
 
-		saveButton = new JButton("Save");
+		saveButton = new JButton("Save");//creates buttons for Save, Load, Rand and Reset functionalities and creates action listeners on these buttons
 		saveButton.addActionListener(e -> window.saveProgress());
 		this.add(saveButton);
 		loadButton = new JButton("Load");
@@ -146,20 +146,20 @@ public class ActionField extends JPanel {
 		this.add(randButton);
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(e -> {
-			window.resetGame();
-			level.setSelectedIndex(0);
+			window.resetGame();//if pressed , resets the game of Sudoku 
+			level.setSelectedIndex(0);//sets the index to 0 and stops the timer 
 			timerStop = true;
 			window.log("Resetting game...");
 		});
 		this.add(resetButton);
-		JLabel pointLabel = new JLabel("Points: ");
+		JLabel pointLabel = new JLabel("Points: ");//creates JLabel which represents points 
 		this.add(pointLabel);
 		point = new JTextField();
-		point.setEditable(false);
+		point.setEditable(false);//sets the option that user cannot edit this text field 
 		point.setText("0");
 		point.setPreferredSize(new Dimension(40, 20));
 		this.add(point);
-		JLabel timeLabel = new JLabel("Time: ");
+		JLabel timeLabel = new JLabel("Time: ");//creates JLabel which represents time  
 		this.add(timeLabel);
 		this.add(time);
 	}
