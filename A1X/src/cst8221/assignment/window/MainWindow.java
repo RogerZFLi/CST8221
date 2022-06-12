@@ -183,6 +183,8 @@ public class MainWindow extends JFrame {
 	 * Purpose: Method loadMasked() is used to Load game with masked numbers based on difficulty level selected. 
 	 * Algorithm: Uses JFileChooser to select the file, chooses the file and uses scanner to scan the details of the game, then sets all these details 
 	 * to actual Sudoku game. Catches the errors. 
+	 * @param difficulty Defines the difficulty level, easy, medium or hard
+	 * @param dim the dimension to be loaded to
 	 */
 	public void loadMasked(String difficulty, int dim) {
 		
