@@ -212,21 +212,14 @@ public class PlayField extends JPanel {
 				numberJButtons[i][j] = btn;
 				if(dimBlocks[i/dim][j/dim]==null) dimBlocks[i/dim][j/dim] = new DimBlock(dim);
 				dimBlocks[i/dim][j/dim].addButton(btn);
+				if(i/dim%2==0 && j/dim%2==0|| i/dim%2!=0 && j/dim%2!=0){
+					for(JButton b: dimBlocks[i/dim][j/dim].getButtons())
+						b.setBackground(new Color(220, 240, 244));
+				}
 				this.add(btn);
 			}
 		}
 		
-		for (int i = 0; i < (int) (Math.pow(dim, 2)); i++) {
-			for (int j = 0; j < (int) (Math.pow(dim, 2)); j++) {
-				if(((i/dim)%2==0 &&(j/dim)%2==0 || (i/dim)%2!=0 && (j/dim)%2!=0)&& i%dim == 0 && j%dim == 0 ) {
-					for(int n=0; n<dim; n++) {
-						for(int m=0; m<dim; m++) {
-							numberJButtons[i+n][j + m].setBackground(new Color(220, 240, 244));
-						}
-					}
-				}
-			}
-		}
 		
 		for(int i=1; i<=(int) (Math.pow(dim, 2));i++) {
 			JButton btn = new JButton(String.valueOf(i<10?i : Character.toString((char)('A' + (i - 10)))));
@@ -315,25 +308,6 @@ public class PlayField extends JPanel {
 		}
 	}
 	
-	/**
-	 * Method Name: setDifficulty
-	 * Purpose: Method setDifficulty() is used to set specific level of difficulty selected bu the user. 
-	 * Algorithm: 
-	 * @param level - String parameter level of difficulty selected by user. 
-	 */
-	public void setDifficulty(String level) {  //TODO
-		switch(level) {
-		case HARD:
-			
-			break;
-		case MEDIUM:
-			break;
-		case EASY:
-			break;
-		default:
-			System.err.println("Error happens");
-		}
-	}
 	
 	/**
 	 * Method Name: stepComplete

@@ -123,7 +123,7 @@ public class Menu extends JMenuBar {
 			//sets JLable with different info about the Sudoku game 
 			JLabel name = new JLabel("Sudoku");
 			JLabel version = new JLabel("Version: 1.0.0");
-			JLabel author = new JLabel("By: Roger Li - 040896855, Denys Savskyi");
+			JLabel author = new JLabel("By: Roger Li - 040896855, Denys Savskyi - 041004781");
 			labelContainer.add(name);
 			labelContainer.add(version);
 			labelContainer.add(author);

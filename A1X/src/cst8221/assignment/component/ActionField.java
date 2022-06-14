@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 import cst8221.assignment.window.MainWindow;
 
 /**
@@ -131,15 +132,18 @@ public class ActionField extends JPanel {
 			}
 
 		});
-
+		
 		this.add(levelLabel);
+		level.setEnabled(false);
 		this.add(level);
 
 		saveButton = new JButton("Save");//creates buttons for Save, Load, Rand and Reset functionalities and creates action listeners on these buttons
 		saveButton.addActionListener(e -> window.saveProgress());
+		saveButton.setEnabled(false);
 		this.add(saveButton);
 		loadButton = new JButton("Load");
 		loadButton.addActionListener(e -> window.loadProgress());
+		loadButton.setEnabled(false);
 		this.add(loadButton);
 		JButton randButton = new JButton("Rand");
 		randButton.addActionListener(e -> window.rand());
@@ -158,9 +162,11 @@ public class ActionField extends JPanel {
 		point.setEditable(false);//sets the option that user cannot edit this text field 
 		point.setText("0");
 		point.setPreferredSize(new Dimension(40, 20));
+		point.setEnabled(false);
 		this.add(point);
 		JLabel timeLabel = new JLabel("Time: ");//creates JLabel which represents time  
 		this.add(timeLabel);
+		time.setEnabled(false);
 		this.add(time);
 	}
 
