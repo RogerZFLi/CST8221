@@ -9,7 +9,7 @@
  * Purpose:  Menu.java is used to create functional components such as Game and Help Menus inside the Sudoku game in a menu bar. 
  * Menu provides user-friendly way to let the user pick options of the game.
  */
-package cst8221.assignment.component;
+package cst8221.assignment.view;
 
 import java.awt.Dimension;
 
@@ -21,7 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import cst8221.assignment.window.MainWindow;
+import cst8221.assignment.controller.GameController;
 
 /**
  * Class Name: Menu
@@ -75,19 +75,19 @@ public class Menu extends JMenuBar {
 		
 		JMenuItem newGame = new JMenuItem("New");
 		newGame.addActionListener(e->{
-			window.resetGame();
+			GameController.getController().resetGame();
 		});
 		game.add(newGame);
 		JMenuItem open = new JMenuItem("Open");
 		//load the saved progress file, save function as Load button
 		open.addActionListener(e->{
-			window.loadProgress();
+			GameController.getController().loadProgress();
 			window.getLogField().getLogs().append("Opening a saved progress...\n");
 		});
 		game.add(open);
 		JMenuItem save = new JMenuItem("Save");
 		save.addActionListener(e->{
-			window.saveProgress();
+			GameController.getController().saveProgress();
 			window.getLogField().getLogs().append("Saving progress...\n");
 		});
 		game.add(save);
@@ -95,7 +95,7 @@ public class Menu extends JMenuBar {
 		//clear the play field
 		reset.addActionListener(e->{
 			
-			window.resetGame();
+			GameController.getController().resetGame();
 			window.getLogField().getLogs().append("Reseting game...\n");
 		});
 		game.add(reset);

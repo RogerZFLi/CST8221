@@ -9,7 +9,7 @@
  * Purpose:  LogField.java is used to implement the functionality of the history panel. This field will display logs about every user action. 
  * Show possible errors. Allows you to set and get all the logs.
  */
-package cst8221.assignment.component;
+package cst8221.assignment.view;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,8 +32,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-
-import cst8221.assignment.window.MainWindow;
+import cst8221.assignment.controller.GameController;
 
 /**
  * Class Name: LogField
@@ -156,7 +155,7 @@ public class LogField extends JPanel {
 				window.getActionField().getLevel().setEnabled(false);
 				window.getActionField().getSaveButton().setEnabled(false);
 				window.getActionField().getLoadButton().setEnabled(false);
-				window.resetGame();
+				GameController.getController().resetGame();
 				
 			}
 		});

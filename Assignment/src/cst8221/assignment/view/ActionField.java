@@ -10,7 +10,7 @@
  * This class implements such components as: JButton Save, Load, Rand and Reset. The points and game time are also implemented with the help of JLabels.
  * In this part of the application, the user can see most of the Sudoku game settings.
  */
-package cst8221.assignment.component;
+package cst8221.assignment.view;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,8 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
-import cst8221.assignment.window.MainWindow;
+import cst8221.assignment.controller.GameController;
 
 /**
  * Class Name: ActionField
@@ -125,9 +124,9 @@ public class ActionField extends JPanel {
 			if (!level.getSelectedItem().equals("Select")) {//checks if selected item is equal to "select" returns false then 
 				second = new SecondCounter();//creates object of class SecondCounter 
 				t.schedule(second, 1000);
-				window.resetGame();//resets the game of Sudoku 
+				GameController.getController().resetGame();//resets the game of Sudoku 
 				if(!window.isFromFile())//checks if object window is not from file 
-					window.loadMasked((String) level.getSelectedItem(), dimSelected);
+					GameController.getController().loadMasked((String) level.getSelectedItem(), dimSelected);
 				window.log("Set level to '" + level.getSelectedItem() + "....");
 			}
 
@@ -138,19 +137,19 @@ public class ActionField extends JPanel {
 		this.add(level);
 
 		saveButton = new JButton("Save");//creates buttons for Save, Load, Rand and Reset functionalities and creates action listeners on these buttons
-		saveButton.addActionListener(e -> window.saveProgress());
+		saveButton.addActionListener(e -> GameController.getController().saveProgress());
 		saveButton.setEnabled(false);
 		this.add(saveButton);
 		loadButton = new JButton("Load");
-		loadButton.addActionListener(e -> window.loadProgress());
+		loadButton.addActionListener(e -> GameController.getController().loadProgress());
 		loadButton.setEnabled(false);
 		this.add(loadButton);
 		JButton randButton = new JButton("Rand");
-		randButton.addActionListener(e -> window.rand());
+		randButton.addActionListener(e -> GameController.getController().rand());
 		this.add(randButton);
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(e -> {
-			window.resetGame();//if pressed , resets the game of Sudoku 
+			GameController.getController().resetGame();//if pressed , resets the game of Sudoku 
 			level.setSelectedIndex(0);//sets the index to 0 and stops the timer 
 			timerStop = true;
 			window.log("Resetting game...");

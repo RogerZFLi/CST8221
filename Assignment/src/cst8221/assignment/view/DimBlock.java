@@ -8,7 +8,7 @@
  * Compiler: Eclipse IDE for Java Developers - Version: 2022-03 (4.23.0)
  * Purpose:File DimBlock.java is used to group the blocks of buttons that belong to the same dimension (e.g. dim=2, buttons at row 0, 1 and col 0, 1 will be grouped) with respect to Sudoku game logic. 
  */
-package cst8221.assignment.component;
+package cst8221.assignment.view;
 
 import java.util.ArrayList;
 
