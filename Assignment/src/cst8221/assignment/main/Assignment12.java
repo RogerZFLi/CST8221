@@ -12,7 +12,7 @@ package cst8221.assignment.main;
 
 import java.awt.EventQueue;
 
-import cst8221.assignment.view.MainWindow;
+import cst8221.assignment.controller.GameController;
 
 
 /**
@@ -37,7 +37,7 @@ public class Assignment12 {
 	 */
 	public static void main(String[] args) {
 		//invoke the game GUI
-		EventQueue.invokeLater(()->MainWindow.loadGame());
+		EventQueue.invokeLater(()->GameController.start());
 
 	}
 	

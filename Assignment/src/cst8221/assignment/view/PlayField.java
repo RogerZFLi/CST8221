@@ -59,13 +59,14 @@ public class PlayField extends JPanel {
 	private Map<String, String> cellsTakenMap;//creates Map with keys and objects String
 	private String numSelected;
 	private static Map<Integer, String> rowColRepStringMap;//creates Map with Integer keys and objects String
-//	private int[] numberCounter;
+	private static Map<String, Integer> btnNameRepNumberMap;
+	//	private int[] numberCounter;
 //	private int totalCounter;
 	private DimBlock[][] dimBlocks;
 	private static final int STANDARD_POINT_EVERY_FILL = 10;
 	private static final int POINT_ADJUSTMENT_ON_TIME = 5;
 	private static int pointForThisFill = 0;
-	private static long totalPoint = 0;
+	private static int totalPoint = 0;
 	private static LocalDateTime fillStart;
 	private static LocalDateTime fillEnd;
 
@@ -90,13 +91,7 @@ public class PlayField extends JPanel {
 		load(window);
 	}
 
-	/**
-	 * Method Name: reload
-	 * Purpose: Method reload is used to create window with selected dimension if reloaded. 
-	 * Algorithm: 
-	 * @param window - parameter of MainWindow class
-	 * @param dimSelected - integer parameter of selected simension 
-	 */
+	
 	public void reload(MainWindow window, int dimSelected) {
 		this.removeAll();
 		load(window, dimSelected);
@@ -151,6 +146,7 @@ public class PlayField extends JPanel {
 		numbersToSelect = new JButton[(int) (Math.pow(dim, 2))];//creates buttons for user to select 
 		cellsTakenMap = new HashMap<>();
 		rowColRepStringMap = new HashMap<>();
+		btnNameRepNumberMap = new HashMap<>();
 //		numberCounter = new int[(int)Math.pow(dim, 2)];
 //		totalCounter = 0;
 		dimBlocks = new DimBlock[dim][dim];
@@ -158,9 +154,12 @@ public class PlayField extends JPanel {
 		totalPoint = 0;
 		for(int i=0; i<(int) (Math.pow(dim, 2)); i++) {
 			if(i>9) {
+				
 				rowColRepStringMap.put(i, Character.toString('A' + i - 10));//puts to HasMap if number is larger then 9 (letters) 
+				btnNameRepNumberMap.put(Character.toString('A' + i - 10), i);
 			}else {
 				rowColRepStringMap.put(i, String.valueOf(i));//puts number to HashMap
+				btnNameRepNumberMap.put(String.valueOf(i), i);
 			}
 		}
 		
@@ -199,11 +198,13 @@ public class PlayField extends JPanel {
 						
 						if(available) {
 							GameController.getController().fillNumber(window, btn, numSelected, dim, false);
+							
 							fillEnd= LocalDateTime.now();
 							int secondTaken = fillEnd.toLocalTime().toSecondOfDay() - fillStart.toLocalTime().toSecondOfDay();
 							pointForThisFill = calculatePointOfCurrentFill(secondTaken);
 							totalPoint += pointForThisFill;
 							if(window.getActionField().isPlayMode()) window.getActionField().getPoint().setText(String.valueOf(totalPoint));
+							GameController.getProgress().updateProgress(totalPoint, window.getActionField().getTime().getText(), btnNameRepNumberMap.get(Character.toString(btn.getName().charAt(0))), btnNameRepNumberMap.get(Character.toString(btn.getName().charAt(1))), numSelected);
 							fillStart = LocalDateTime.now();
 						}
 					}
@@ -241,6 +242,7 @@ public class PlayField extends JPanel {
 	}
 	
 	private static int calculatePointOfCurrentFill(int secondTaken) {
+		if(secondTaken<1) secondTaken = 1;
 		double currentPointDec = STANDARD_POINT_EVERY_FILL * (double) (POINT_ADJUSTMENT_ON_TIME / secondTaken);
 		int currentPointInt = 0;
 		if(currentPointDec<1) currentPointInt = 1;

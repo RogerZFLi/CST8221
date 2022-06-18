@@ -2,8 +2,11 @@ package cst8221.assignment.controller;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,6 +18,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
+import cst8221.assignment.model.Progress;
 import cst8221.assignment.view.ActionField;
 import cst8221.assignment.view.MainWindow;
 import cst8221.assignment.view.PlayField;
@@ -25,12 +29,19 @@ public class GameController {
 	
 	private static final MainWindow GAME_WINDOW = MainWindow.loadGame();
 	private static GameController GAME_CONTROLLER = null;
-	
-	private int[] numberCounter;
-	private int totalCounter;
+	private static Progress progress;
+	private static int[] numberCounter;
+	private static int totalCounter;
 	
 	private GameController() {
 		
+	}
+	
+	public static void start() {
+		GameController.getController();
+		progress = new Progress();
+		numberCounter = new int[(int)Math.pow(2, 2)];
+		totalCounter = 0;
 	}
 	
 	public static GameController getController() {
@@ -45,19 +56,24 @@ public class GameController {
 	 * Algorithm: On playField calls method reload() with appropriate vars and resets the game. 
 	 */
 	public void resetGame() {
-		GAME_WINDOW.getPlayField().reload(GAME_WINDOW, GAME_WINDOW.getActionField().getDimSelected()==0?2:GAME_WINDOW.getActionField().getDimSelected());
-		GAME_WINDOW.getPlayField().setNumSelected(null);
-		GAME_WINDOW.getActionField().reset(); //uses reset() method to reset actionField
+		progress.resetProgress(GAME_WINDOW.getActionField().getDimSelected()==0?2:GAME_WINDOW.getActionField().getDimSelected());
+		reloadPlayField();
+		resetActionField(); //uses reset() method to reset actionField
 		for(int i = 0; i < numberCounter.length; i++) {
 			numberCounter[i] = 0;
 		}
 		totalCounter = 0;
 		
 	}
-	
+	/**
+	 * Method Name: reloadPlayField
+	 * Purpose: Method reload is used to create window with selected dimension if reloaded. 
+	 * Algorithm: 
+	 */
 	public void reloadPlayField() {
 		GAME_WINDOW.getPlayField().removeAll();
 		GAME_WINDOW.getPlayField().load(GAME_WINDOW, GAME_WINDOW.getActionField().getDimSelected());
+		GAME_WINDOW.getPlayField().setNumSelected(null);
 		GAME_WINDOW.getPlayField().invalidate();
 		GAME_WINDOW.getPlayField().validate();
 		GAME_WINDOW.getPlayField().repaint();
@@ -96,41 +112,62 @@ public class GameController {
 		File fileToRead = null;
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
 			fileToRead = fileChooser.getSelectedFile();
-		    System.out.println("Save as file: " + fileToRead.getAbsolutePath());
+		    System.out.println("Load from file: " + fileToRead.getAbsolutePath());
 		}
 		//Read progress from file
 		if(fileToRead!=null) {
-			try (Scanner scanner = new Scanner(fileToRead)){
-				int dimNumber = scanner.nextInt();
-				scanner.nextLine();
-				String level = scanner.nextLine();
-				String point = scanner.nextLine();
-				String time = scanner.nextLine();
-				GAME_WINDOW.getActionField().getDim().setSelectedItem(dimNumber);
-				GAME_WINDOW.getActionField().getLevel().setSelectedItem(level);
-				GAME_WINDOW.getActionField().getPoint().setText(point);
-				GAME_WINDOW.getActionField().getTime().setText(time);
+			try (FileInputStream fis = new FileInputStream(fileToRead);
+				     ObjectInputStream ois = new ObjectInputStream(fis)) {
+				Progress progress = (Progress)ois.readObject();
+				GAME_WINDOW.getActionField().getDim().setSelectedItem(progress.getDim());
+				GAME_WINDOW.getActionField().getPoint().setText(String.valueOf(progress.getPoint()));
+				GAME_WINDOW.getActionField().getTime().setText(progress.getTime());
 				JButton[][] btns = GAME_WINDOW.getPlayField().getNumberJButtons();
 				
 				for(int i=0; i<btns.length; i++) {
-					String line = null;
-					if(scanner.hasNext()) {
-						line = scanner.nextLine();
-						System.out.println(line);
-						String[] numbers = line.split(",");
 						for(int j=0; j<btns[i].length; j++) {
-							if(!numbers[j].isBlank()) {
-								fillNumber(GAME_WINDOW, btns[i][j], numbers[j], dimNumber,true);
+							
+							if(progress.getNumbers()[i][j]!=null) {
+								fillNumber(GAME_WINDOW, btns[i][j], progress.getNumbers()[i][j], progress.getDim(),true);
 							}
 						}
-					}
 				}
 				GAME_WINDOW.log("Progress loaded....");
-			} catch (IOException e) {
-				GAME_WINDOW.log("Fail to load progress...");
-				e.printStackTrace();
+			}catch(Exception ioe) {
+				System.err.println(ioe.getStackTrace());
 			}
+//			try (Scanner scanner = new Scanner(fileToRead)){
+//				int dimNumber = scanner.nextInt();
+//				scanner.nextLine();
+//				String level = scanner.nextLine();
+//				String point = scanner.nextLine();
+//				String time = scanner.nextLine();
+//				GAME_WINDOW.getActionField().getDim().setSelectedItem(dimNumber);
+//				GAME_WINDOW.getActionField().getLevel().setSelectedItem(level);
+//				GAME_WINDOW.getActionField().getPoint().setText(point);
+//				GAME_WINDOW.getActionField().getTime().setText(time);
+//				JButton[][] btns = GAME_WINDOW.getPlayField().getNumberJButtons();
+//				
+//				for(int i=0; i<btns.length; i++) {
+//					String line = null;
+//					if(scanner.hasNext()) {
+//						line = scanner.nextLine();
+//						System.out.println(line);
+//						String[] numbers = line.split(",");
+//						for(int j=0; j<btns[i].length; j++) {
+//							if(!numbers[j].isBlank()) {
+//								fillNumber(GAME_WINDOW, btns[i][j], numbers[j], dimNumber,true);
+//							}
+//						}
+//					}
+//				}
+//				GAME_WINDOW.log("Progress loaded....");
+//			} catch (IOException e) {
+//				GAME_WINDOW.log("Fail to load progress...");
+//				e.printStackTrace();
+//			}
 		}
+		GAME_WINDOW.setFromFile(false);
 	}
 	
 	/**
@@ -253,13 +290,19 @@ public class GameController {
 		}
 		//Save file
 		if(fileToSave!=null) {
-			try (FileWriter fw = new FileWriter(fileToSave)){
-				fw.write(sb.toString());
-				GAME_WINDOW.log("Progress saved....");
-			} catch (IOException e) {
-				GAME_WINDOW.log("Fail to save progress...");
-				e.printStackTrace();
+			try (FileOutputStream fos = new FileOutputStream(fileToSave);
+				     ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+				oos.writeObject(progress);
+			}catch(IOException ioe) {
+				
 			}
+//			try (FileWriter fw = new FileWriter(fileToSave)){
+//				fw.write(sb.toString());
+//				GAME_WINDOW.log("Progress saved....");
+//			} catch (IOException e) {
+//				GAME_WINDOW.log("Fail to save progress...");
+//				e.printStackTrace();
+//			}
 		}
 		
 		
@@ -381,6 +424,14 @@ public class GameController {
 		for(int i=0; i<GAME_WINDOW.getPlayField().getNumbersToSelect().length; i++) {
 			GAME_WINDOW.getPlayField().getNumbersToSelect()[i].setBackground(Color.GREEN);
 		}
+	}
+
+	public static Progress getProgress() {
+		return progress;
+	}
+
+	public static void setProgress(Progress progress) {
+		GameController.progress = progress;
 	}
 
 
