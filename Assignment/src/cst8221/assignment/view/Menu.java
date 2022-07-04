@@ -12,8 +12,11 @@
 package cst8221.assignment.view;
 
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -72,13 +75,17 @@ public class Menu extends JMenuBar {
 	public void loadGameMenu(MainWindow window) {
 		
 		JMenu game = new JMenu("Game");
+		Icon newIcon = new ImageIcon(new ImageIcon("images/new.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		
 		JMenuItem newGame = new JMenuItem("New");
+		newGame.setIcon(newIcon);
 		newGame.addActionListener(e->{
 			GameController.getController().resetGame();
 		});
 		game.add(newGame);
 		JMenuItem open = new JMenuItem("Open");
+		Icon openIcon = new ImageIcon(new ImageIcon("images/open.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		open.setIcon(openIcon);
 		//load the saved progress file, save function as Load button
 		open.addActionListener(e->{
 			GameController.getController().loadProgress();
@@ -86,12 +93,16 @@ public class Menu extends JMenuBar {
 		});
 		game.add(open);
 		JMenuItem save = new JMenuItem("Save");
+		Icon saveIcon = new ImageIcon(new ImageIcon("images/save.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		save.setIcon(saveIcon);
 		save.addActionListener(e->{
 			GameController.getController().saveProgress();
 			window.getLogField().getLogs().append("Saving progress...\n");
 		});
 		game.add(save);
 		JMenuItem reset = new JMenuItem("Reset");
+		Icon resetIcon = new ImageIcon(new ImageIcon("images/reset.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		reset.setIcon(resetIcon);
 		//clear the play field
 		reset.addActionListener(e->{
 			
@@ -100,6 +111,8 @@ public class Menu extends JMenuBar {
 		});
 		game.add(reset);
 		JMenuItem exit = new JMenuItem("Exit");
+		Icon exitIcon = new ImageIcon(new ImageIcon("images/exit.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		exit.setIcon(exitIcon);
 		exit.addActionListener(e->window.dispose());
 		game.add(exit);
 		this.add(game);
@@ -115,6 +128,8 @@ public class Menu extends JMenuBar {
 	public void loadHelpMenu(MainWindow window) {
 		JMenu help = new JMenu("Help");//creates the object of JMenu and JMenuItem
 		JMenuItem about = new JMenuItem("About");
+		Icon infoIcon = new ImageIcon(new ImageIcon("images/info.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		about.setIcon(infoIcon);
 		about.addActionListener(e->{
 			JDialog info = new JDialog(window);
 			info.setTitle("About");

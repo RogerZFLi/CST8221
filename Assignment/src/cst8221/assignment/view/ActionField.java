@@ -158,7 +158,7 @@ public class ActionField extends JPanel {
 		JLabel pointLabel = new JLabel("Points: ");//creates JLabel which represents points 
 		this.add(pointLabel);
 		point = new JTextField();
-		point.setEditable(false);//sets the option that user cannot edit this text field 
+//		point.setEditable(false);//sets the option that user cannot edit this text field 
 		point.setText("0");
 		point.setPreferredSize(new Dimension(40, 20));
 		point.setEnabled(false);

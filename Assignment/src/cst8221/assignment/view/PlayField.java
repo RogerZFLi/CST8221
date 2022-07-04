@@ -183,7 +183,7 @@ public class PlayField extends JPanel {
 								available = false;
 								window.log("Invalid try...");
 								//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
-								String soundName = "wrong.wav";  
+								String soundName = "sounds/wrong.wav";  
 								try {
 									AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
 									Clip clip = AudioSystem.getClip();
@@ -251,111 +251,6 @@ public class PlayField extends JPanel {
 		return currentPointInt;
 	}
 
-//	/**
-//	 * Method Name: fillNumber
-//	 * Purpose: Method fillNumber() is used to implement the functionality of the buttons to set the selected by user values for the game. 
-//	 * Algorithm: This method checks if button is not null and sets the appropriate number and color (cyan) for the specific button and increments counter. 
-//	 * After that it prints the message in the history panel. Then checks if the board is finished and plays the "complete" sound.
-//	 * Then checks if the step is completed and plays the "good job" sound. If only one is correct, plays "correct" sound.    
-//	 * @param window - parameter of class MainWindow 
-//	 * @param btn - button
-//	 * @param number - String parameter 
-//	 * @param dim - integer parameter of the dimension 
-//	 * @param muted - boolean parameter
-//	 */
-//	public void fillNumber(MainWindow window, JButton btn, String number, int dim, boolean muted) {
-//		int numRep = -1;
-//		String originalNumber = null;
-//		try {
-//			numRep = Integer.parseInt(number);
-//		}catch(NumberFormatException ex) {
-//			numRep = number.charAt(0) - 55;
-//		}
-//		
-//		if(btn.getText()!=null)	{//checks if button is not null 
-//			numberCounter[numRep-1]--;
-//			totalCounter--;
-//			originalNumber = btn.getText();
-//			revertToUncomplete(originalNumber);
-//		}
-//		btn.setText(number);
-//		if(!muted) btn.setBackground(Color.CYAN);//sets the background color 
-//		cellsTakenMap.put(btn.getName(), number);
-//		
-//		numberCounter[numRep-1]++;//increments counter 
-//		totalCounter++;
-//		
-//		window.log(number + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...");//displays logs 
-//		String soundName = null;
-//		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {//checks if the game is completed 
-//			soundName = "complete.wav"; 
-//			if(!muted) complete();//calls complete method 
-//			ActionField.setTimerStop(true);
-//		}else if(numberCounter[numRep-1]  == dim * dim) {//checks if the whole step is completed 
-//			soundName = "goodjob.wav";
-//			if(!muted) stepComplete(number);
-//		}
-//		else
-//			soundName = "correct.wav";  
-//		if(muted) return;
-//		//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
-//		try {
-//			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-//			Clip clip = AudioSystem.getClip();
-//			clip.open(audioInputStream);
-//			clip.start();
-//		}catch(Exception ex) {
-//			System.err.println("Error happened");
-//		}
-//	}
-//	
-//	
-//	/**
-//	 * Method Name: stepComplete
-//	 * Purpose: Method stepComplete() is used to set background color to Blue if the one digit is finished.
-//	 * Algorithm: Method stepComplete() uses nested loops to check if one digit is finished and sets Background color to Blue. 
-//	 * @param number - 
-//	 */
-//	public void stepComplete(String number) {
-//		for(int i=0; i<numberJButtons.length; i++) {
-//			for(int j=0; j<numberJButtons[i].length; j++) {
-//				if(numberJButtons[i][j].getText()!=null && numberJButtons[i][j].getText().equals(number)) {
-//					numberJButtons[i][j].setBackground(Color.BLUE);
-//				}
-//				
-//			}
-//		}
-//	}
-//	
-//	public void revertToUncomplete(String number) {
-//		for(int i=0; i<numberJButtons.length; i++) {
-//			for(int j=0; j<numberJButtons[i].length; j++) {
-//				if(number!=null) {
-//					if(numberJButtons[i][j].getText()!=null && numberJButtons[i][j].getText().equals(number)) {
-//						numberJButtons[i][j].setBackground(Color.CYAN);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	
-//	/**
-//	 * Method Name: complete
-//	 * Purpose: Method complete() is used to set background color to Pink and sets to not enabled mode if the game is finished.  
-//	 * Algorithm: Method complete() uses nested loops to check if the game is completed and sets Background color to Pink. 
-//	 */
-//	public void complete() {
-//		for(int i=0; i<numberJButtons.length; i++) {
-//			for(int j=0; j<numberJButtons[i].length; j++) {
-//				numberJButtons[i][j].setBackground(Color.PINK);
-//				numberJButtons[i][j].setEnabled(false);;
-//			}
-//		}
-//		for(int i=0; i<numbersToSelect.length; i++) {
-//			numbersToSelect[i].setBackground(Color.GREEN);
-//		}
-//	}
-//	
 	/**
 	 * Method Name: getNumSelected
 	 * Purpose: Method getNumSelected() of class ActionField gets the value of the variable numSelected

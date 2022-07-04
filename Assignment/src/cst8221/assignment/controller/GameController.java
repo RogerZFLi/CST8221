@@ -18,6 +18,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
+import cst8221.assignment.model.GameRecord;
 import cst8221.assignment.model.Progress;
 import cst8221.assignment.view.ActionField;
 import cst8221.assignment.view.MainWindow;
@@ -30,6 +31,7 @@ public class GameController {
 	private static final MainWindow GAME_WINDOW = MainWindow.loadGame();
 	private static GameController GAME_CONTROLLER = null;
 	private static Progress progress;
+	private static GameRecord record;
 	private static int[] numberCounter;
 	private static int totalCounter;
 	
@@ -42,6 +44,7 @@ public class GameController {
 		progress = new Progress();
 		numberCounter = new int[(int)Math.pow(2, 2)];
 		totalCounter = 0;
+		record = new GameRecord();
 	}
 	
 	public static GameController getController() {
@@ -105,7 +108,7 @@ public class GameController {
 		GAME_WINDOW.setFromFile(true);
 		GAME_WINDOW.getLogField().getPlayRadioButton().setSelected(true);
 		//Open current project folder location to save file
-		JFileChooser fileChooser = new JFileChooser(".");
+		JFileChooser fileChooser = new JFileChooser("./progress");
 		fileChooser.setDialogTitle("Specify a file to load");   
 		 
 		int userSelection = fileChooser.showSaveDialog(GAME_WINDOW);
@@ -134,38 +137,8 @@ public class GameController {
 				}
 				GAME_WINDOW.log("Progress loaded....");
 			}catch(Exception ioe) {
-				System.err.println(ioe.getStackTrace());
+				GAME_WINDOW.log("Fail to load progress....");
 			}
-//			try (Scanner scanner = new Scanner(fileToRead)){
-//				int dimNumber = scanner.nextInt();
-//				scanner.nextLine();
-//				String level = scanner.nextLine();
-//				String point = scanner.nextLine();
-//				String time = scanner.nextLine();
-//				GAME_WINDOW.getActionField().getDim().setSelectedItem(dimNumber);
-//				GAME_WINDOW.getActionField().getLevel().setSelectedItem(level);
-//				GAME_WINDOW.getActionField().getPoint().setText(point);
-//				GAME_WINDOW.getActionField().getTime().setText(time);
-//				JButton[][] btns = GAME_WINDOW.getPlayField().getNumberJButtons();
-//				
-//				for(int i=0; i<btns.length; i++) {
-//					String line = null;
-//					if(scanner.hasNext()) {
-//						line = scanner.nextLine();
-//						System.out.println(line);
-//						String[] numbers = line.split(",");
-//						for(int j=0; j<btns[i].length; j++) {
-//							if(!numbers[j].isBlank()) {
-//								fillNumber(GAME_WINDOW, btns[i][j], numbers[j], dimNumber,true);
-//							}
-//						}
-//					}
-//				}
-//				GAME_WINDOW.log("Progress loaded....");
-//			} catch (IOException e) {
-//				GAME_WINDOW.log("Fail to load progress...");
-//				e.printStackTrace();
-//			}
 		}
 		GAME_WINDOW.setFromFile(false);
 	}
@@ -196,7 +169,7 @@ public class GameController {
 			default:
 				System.err.println("Error happened");
 		}
-		File fileToRead = new File("Level/" + dim);
+		File fileToRead = new File("designs/" + dim);
 		
 		//Read progress from file
 		if(fileToRead!=null) {
@@ -252,34 +225,10 @@ public class GameController {
 	 */
 	public void saveProgress() {
 		GAME_WINDOW.log("Saving progress....");
-		StringBuilder sb = new StringBuilder();
-		JButton[][] btns = GAME_WINDOW.getPlayField().getNumberJButtons();
-		//uses getter methods to get the values. 
-		sb.append(GAME_WINDOW.getActionField().getDimSelected());
-		sb.append("\n");
-		sb.append(GAME_WINDOW.getActionField().getLevel().getSelectedItem());
-		sb.append("\n");
-		sb.append(GAME_WINDOW.getActionField().getPoint().getText());
-		sb.append("\n");
-		sb.append(GAME_WINDOW.getActionField().getTime().getText());
-		sb.append("\n");
 		
-		for(int i=0; i<btns.length; i++) {
-			for(int j=0; j<btns.length; j++) {
-				String numString = btns[i][j].getText();
-				if(numString == null)
-					sb.append(" ");
-				else {
-					sb.append(numString);
-				}
-				if(j<btns[i].length - 1)
-					sb.append(",");
-			}
-			sb.append("\n");
-		}
 		
 		//Open current project folder location to save file
-		JFileChooser fileChooser = new JFileChooser(".");
+		JFileChooser fileChooser = new JFileChooser("./progress");
 		fileChooser.setDialogTitle("Specify a file to save");   
 		 
 		int userSelection = fileChooser.showSaveDialog(GAME_WINDOW);
@@ -294,15 +243,8 @@ public class GameController {
 				     ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 				oos.writeObject(progress);
 			}catch(IOException ioe) {
-				
+				GAME_WINDOW.log("Fail to save progress...");
 			}
-//			try (FileWriter fw = new FileWriter(fileToSave)){
-//				fw.write(sb.toString());
-//				GAME_WINDOW.log("Progress saved....");
-//			} catch (IOException e) {
-//				GAME_WINDOW.log("Fail to save progress...");
-//				e.printStackTrace();
-//			}
 		}
 		
 		
@@ -359,14 +301,14 @@ public class GameController {
 		window.log(number + " was put to Row "+ btn.getName().charAt(0) + ", " + " Col " + btn.getName().charAt(1) +"...");//displays logs 
 		String soundName = null;
 		if(totalCounter == (int) (Math.pow(dim, 2)) * (int) (Math.pow(dim, 2))) {//checks if the game is completed 
-			soundName = "complete.wav"; 
+			soundName = "sounds/complete.wav"; 
 			if(!muted) complete();//calls complete method 
 			ActionField.setTimerStop(true);
 		}else if(numberCounter[numRep-1]  == dim * dim) {//checks if the whole step is completed 
-			soundName = "goodjob.wav";
+			soundName = "sounds/goodjob.wav";
 			if(!muted) stepComplete(number);
 		}else
-			soundName = "correct.wav";  
+			soundName = "sounds/correct.wav";  
 		if(muted) return;
 		//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
 		try {
@@ -424,6 +366,15 @@ public class GameController {
 		for(int i=0; i<GAME_WINDOW.getPlayField().getNumbersToSelect().length; i++) {
 			GAME_WINDOW.getPlayField().getNumbersToSelect()[i].setBackground(Color.GREEN);
 		}
+		record = record.loadRecord();
+		record.updateRecord(progress);
+		if(record.isBreakRecord()) {
+			addToModel(record.getTopSolution());
+		}
+	}
+	
+	public void addToModel(Progress p) {
+		
 	}
 
 	public static Progress getProgress() {

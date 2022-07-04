@@ -75,8 +75,9 @@ public class MainWindow extends JFrame {
 		setResizable(false);
 		
 		loadRootPane();//calls loadRootPane method 
-		pack(); //sizes the frame so all its objects are at their correct size. 
+		this.pack(); //sizes the frame so all its objects are at their correct size. 
 		setVisible(true);
+		dispose();
 	}
 	
 	public static MainWindow loadGame() {

@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+//import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.IOException;
 
@@ -107,7 +108,12 @@ public class LogField extends JPanel {
 		BufferedImage myPicture = null;
 		
 		try {
-			myPicture = ImageIO.read(new File("logo.png"));
+			File imageFile = new File("images/logo.png");
+			if(imageFile.exists())
+				myPicture = ImageIO.read(imageFile);
+			else {
+				myPicture = new BufferedImage(200, 120, Image.SCALE_SMOOTH);
+			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -116,16 +122,60 @@ public class LogField extends JPanel {
 		}
 		Image imgScaled = myPicture.getScaledInstance(200, 120, Image.SCALE_SMOOTH);
 		JButton logoButton = new JButton(new ImageIcon(imgScaled));
+		
 		final Image img = myPicture.getScaledInstance(600, myPicture.getHeight() * 600 / myPicture.getWidth(), Image.SCALE_SMOOTH);
-		final Dimension logoSizeDimension = new Dimension(600, myPicture.getHeight() * 600 / myPicture.getWidth());
+//		final Dimension logoSizeDimension = new Dimension(600, myPicture.getHeight() * 600 / myPicture.getWidth());
 		logoButton.addActionListener(e->{
 			JDialog info = new JDialog(window);
 			info.setTitle("Sudoku");
+			info.setSize(600, 777);
+			info.setPreferredSize(new Dimension(600, 777));
+			info.setResizable(false);
 			JPanel labelContainer = new JPanel();
-			JLabel author = new JLabel(new ImageIcon(img));
-			labelContainer.add(author);
+			labelContainer.setLayout(new BoxLayout(labelContainer, BoxLayout.Y_AXIS));
+			
+			JLabel pic = new JLabel(new ImageIcon(img));
+			labelContainer.add(pic);
+			
+			
+			
+			JPanel recordBoard = new JPanel();
+			recordBoard.setLayout(new BoxLayout(recordBoard, BoxLayout.Y_AXIS));
+			JPanel recordTitlePane = new JPanel();
+			recordTitlePane.setSize(600, 30);
+			JLabel recordTitleLabel = new JLabel("Glory Board - Top 10");
+			recordTitlePane.add(recordTitleLabel);
+			recordBoard.add(recordTitlePane);
+			JPanel recordTopPane = new JPanel();
+			recordTopPane.setSize(600, 30);
+			recordTopPane.setLayout(new BoxLayout(recordTopPane, BoxLayout.X_AXIS));
+			
+			JLabel record1 = new JLabel("1: "+" 10000 ");
+			JButton viewChampionButton = new JButton("View Champion's Solution");
+			recordTopPane.add(record1);
+			recordTopPane.add(viewChampionButton);
+			recordBoard.add(recordTopPane);
+			JLabel record2 = new JLabel("2: "+" 10000 ");
+			recordBoard.add(record2);
+			JLabel record3 = new JLabel("3: "+" 10000 ");
+			recordBoard.add(record3);
+			JLabel record4 = new JLabel("4: "+" 10000 ");
+			recordBoard.add(record4);
+			JLabel record5 = new JLabel("5: "+" 10000 ");
+			recordBoard.add(record5);
+			JLabel record6 = new JLabel("6: "+" 10000 ");
+			recordBoard.add(record6);
+			JLabel record7 = new JLabel("7: "+" 10000 ");
+			recordBoard.add(record7);
+			JLabel record8 = new JLabel("8: "+" 10000 ");
+			recordBoard.add(record8);
+			JLabel record9 = new JLabel("9: "+" 10000 ");
+			recordBoard.add(record9);
+			JLabel record10 = new JLabel("10: "+" 10000 ");
+			recordBoard.add(record10);
+			labelContainer.add(recordBoard);
 			info.add(labelContainer);
-			info.setSize(logoSizeDimension);
+//			info.setSize(logoSizeDimension);
 			info.setVisible(true);
 		});
 		logoButton.setPreferredSize(new Dimension(180,120));
