@@ -16,7 +16,7 @@ import cst8221.assignment.controller.GameController;
 
 
 /**
- * Class Name: Assignment12
+ * Class Name: Assignment22
  * Method List: main()
  * Constant List: N/A
  * Purpose: Class Assignment1 is used to invoke the GUI game of Sudoku 
@@ -24,10 +24,10 @@ import cst8221.assignment.controller.GameController;
  * @author Denys Savskyi 
  * @version Version 2 (2022-06-05)
  * @see "Package: cst8221.assignment.main; Import: java.awt.EventQueue;"
- * @since JDK 18.0.1.1
+ * @since JDK 1.8.0.1.1
  * @since JRE JavaSE-14
  */
-public class Assignment12 { 
+public class Assignment22 { 
 	
 	/**
 	 * Method Name: main

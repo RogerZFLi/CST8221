@@ -24,7 +24,7 @@ public class DesignedSolutions implements Serializable {
 	private static final DesignedSolutions SOLUTIONS = null;
 	
 	private static SortedSet<Progress> solutions2D;
-	private static SortedSet<Progress> solutionsD;
+	private static SortedSet<Progress> solutions3D;
 	private static SortedSet<Progress> solutions4D;
 	
 	public static DesignedSolutions getSolutions() {

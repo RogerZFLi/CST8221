@@ -28,7 +28,7 @@ public class GameController {
 	
 	
 	
-	private static final MainWindow GAME_WINDOW = MainWindow.loadGame();
+	private static final MainWindow GAME_WINDOW = MainWindow.loadGame(); 
 	private static GameController GAME_CONTROLLER = null;
 	private static Progress progress;
 	private static GameRecord record;
