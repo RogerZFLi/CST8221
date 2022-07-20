@@ -178,10 +178,12 @@ public class PlayField extends JPanel {
 						
 						boolean available = true;
 						for(String k : cellsTakenMap.keySet()) {
-							System.out.println(k);
-							if(cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) {
+							DimBlock currentDimBlock = dimBlockButtonBelong(btn);
+							if(currentDimBlock==null) return;
+							if((cellsTakenMap.get(k).equals(numSelected) && (k.charAt(0) == btn.getName().charAt(0)|| k.charAt(1) == btn.getName().charAt(1))) || currentDimBlock.getFilledChars().contains(numSelected)) {
 								available = false;
 								window.log("Invalid try...");
+								
 								//https://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
 								String soundName = "sounds/wrong.wav";  
 								try {
@@ -192,6 +194,7 @@ public class PlayField extends JPanel {
 								}catch(Exception ex) {
 									System.err.println("Error happened");
 								}
+								GameController.popupSplash("images/sudoku_err.png", 1000);
 								break;
 							}
 						}
@@ -241,6 +244,13 @@ public class PlayField extends JPanel {
 		}
 	}
 	
+	/**
+	 * Method: calculatePointOfCurrentFill
+	 * Purpose: to calculate point obtained at current progress
+	 * Algorithm: currentPointDec = STANDARD_POINT_EVERY_FILL * (double) (POINT_ADJUSTMENT_ON_TIME / secondTaken)
+	 * @param secondTaken
+	 * @return
+	 */
 	private static int calculatePointOfCurrentFill(int secondTaken) {
 		if(secondTaken<1) secondTaken = 1;
 		double currentPointDec = STANDARD_POINT_EVERY_FILL * (double) (POINT_ADJUSTMENT_ON_TIME / secondTaken);
@@ -290,23 +300,58 @@ public class PlayField extends JPanel {
 	public void setNumberJButtons(JButton[][] numberJButtons) {
 		this.numberJButtons = numberJButtons;
 	}
-
+	
+	/**
+	 * getter of dimBloacks
+	 * @return dimBlocks
+	 */
 	public DimBlock[][] getDimBlocks() {
 		return dimBlocks;
 	}
+	/**
+	 * Method: dimBlockButtonBelong
+	 * Purpose: to get the dim block that the given button belongs to
+	 * Algorithm: Iterate every dim block in play field to find the one contains given button
+	 * @param btn given button to find the dim block that the button belongs to
+	 * @return the DimBlock object that given button belongs to
+	 */
+	public DimBlock dimBlockButtonBelong(JButton btn) {
+		for(DimBlock[] dbs: dimBlocks) {
+			for(DimBlock db : dbs) {
+				if(db.getButtons().contains(btn))
+					return db;
+			}
+		}
+		return null;
+	}
 
+	/**
+	 * getter of cellsTakenMap
+	 * @return cellsTakenMap
+	 */
 	public Map<String, String> getCellsTakenMap() {
 		return cellsTakenMap;
 	}
-
+	/**
+	 * setter of cellsTakenMap
+	 * @param cellsTakenMap value to assign to cellsTakenMap
+	 */
 	public void setCellsTakenMap(Map<String, String> cellsTakenMap) {
 		this.cellsTakenMap = cellsTakenMap;
 	}
 
+	/**
+	 * getter of numbersToSelect
+	 * @return value of numbersToSelect
+	 */
 	public JButton[] getNumbersToSelect() {
 		return numbersToSelect;
 	}
 
+	/**
+	 * setter of numbersToSelect
+	 * @param numbersToSelect value to assign to numbersToSelect
+	 */
 	public void setNumbersToSelect(JButton[] numbersToSelect) {
 		this.numbersToSelect = numbersToSelect;
 	}

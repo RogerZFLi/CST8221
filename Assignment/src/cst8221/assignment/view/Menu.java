@@ -11,18 +11,15 @@
  */
 package cst8221.assignment.view;
 
-import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.Image;
 
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
+import javax.swing.JColorChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 import cst8221.assignment.controller.GameController;
 
@@ -89,6 +86,7 @@ public class Menu extends JMenuBar {
 		//load the saved progress file, save function as Load button
 		open.addActionListener(e->{
 			GameController.getController().loadProgress();
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
 			window.getLogField().getLogs().append("Opening a saved progress...\n");
 		});
 		game.add(open);
@@ -97,6 +95,7 @@ public class Menu extends JMenuBar {
 		save.setIcon(saveIcon);
 		save.addActionListener(e->{
 			GameController.getController().saveProgress();
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
 			window.getLogField().getLogs().append("Saving progress...\n");
 		});
 		game.add(save);
@@ -108,6 +107,7 @@ public class Menu extends JMenuBar {
 			
 			GameController.getController().resetGame();
 			window.getLogField().getLogs().append("Reseting game...\n");
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
 		});
 		game.add(reset);
 		JMenuItem exit = new JMenuItem("Exit");
@@ -127,24 +127,35 @@ public class Menu extends JMenuBar {
 	 */
 	public void loadHelpMenu(MainWindow window) {
 		JMenu help = new JMenu("Help");//creates the object of JMenu and JMenuItem
+		JMenuItem changeColor = new JMenuItem("Change Color");
+		Icon colorPickerIcon = new ImageIcon(new ImageIcon("images/color_dropper.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		changeColor.setIcon(colorPickerIcon);
+		changeColor.addActionListener(e->{
+			Color initialcolor= GameController.currentColor();    
+			Color color=JColorChooser.showDialog(this,"Select a color",initialcolor);  
+			GameController.setColor(color);
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
+		});
+		help.add(changeColor);
 		JMenuItem about = new JMenuItem("About");
 		Icon infoIcon = new ImageIcon(new ImageIcon("images/info.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		about.setIcon(infoIcon);
 		about.addActionListener(e->{
-			JDialog info = new JDialog(window);
-			info.setTitle("About");
-			JPanel labelContainer = new JPanel();
-			labelContainer.setLayout(new BoxLayout(labelContainer, BoxLayout.Y_AXIS));
-			//sets JLable with different info about the Sudoku game 
-			JLabel name = new JLabel("Sudoku");
-			JLabel version = new JLabel("Version: 1.0.0");
-			JLabel author = new JLabel("By: Roger Li - 040896855, Denys Savskyi - 041004781");
-			labelContainer.add(name);
-			labelContainer.add(version);
-			labelContainer.add(author);
-			info.add(labelContainer);
-			info.setSize(new Dimension(300, 100));//sets the size of the frame 
-			info.setVisible(true);
+			GameController.popupSplash("images/sudoku_about.png", 1000);
+//			JDialog info = new JDialog(window);
+//			info.setTitle("About");
+//			JPanel labelContainer = new JPanel();
+//			labelContainer.setLayout(new BoxLayout(labelContainer, BoxLayout.Y_AXIS));
+//			//sets JLable with different info about the Sudoku game 
+//			JLabel name = new JLabel("Sudoku");
+//			JLabel version = new JLabel("Version: 1.0.0");
+//			JLabel author = new JLabel("By: Roger Li - 040896855, Denys Savskyi - 041004781");
+//			labelContainer.add(name);
+//			labelContainer.add(version);
+//			labelContainer.add(author);
+//			info.add(labelContainer);
+//			info.setSize(new Dimension(300, 100));//sets the size of the frame 
+//			info.setVisible(true);
 			window.log("About this program...");
 		});
 		help.add(about);

@@ -31,6 +31,7 @@ import javax.swing.JButton;
 public class DimBlock {
 	
 	private ArrayList<JButton> buttons;
+	private ArrayList<String> filledChars;
 
 	/**
 	 * Method Name: DimBlock
@@ -38,7 +39,7 @@ public class DimBlock {
 	 * Algorithm:  
 	 */
 	public DimBlock() {
-		// TODO Auto-generated constructor stub
+		this(2);
 	}
 	
 	/**
@@ -49,6 +50,7 @@ public class DimBlock {
 	 */
 	public DimBlock(int dim) {
 		buttons = new ArrayList<>();
+		filledChars = new ArrayList<>();
 	}
 	
 	/**
@@ -80,6 +82,22 @@ public class DimBlock {
 	public void setButtons(ArrayList<JButton> buttons) {
 		this.buttons = buttons;
 	}
+	/**
+	 * getter of filledChars
+	 * @return value of filledChars
+	 */
+	public ArrayList<String> getFilledChars() {
+		return filledChars;
+	}
+
+	/**
+	 * add given char to filledChars
+	 * @param charToFill char to be added to filledChars 
+	 */
+	public void addFilledChars(String charToFill) {
+		this.filledChars.add(charToFill);
+	}
+	
 	
 	
 }

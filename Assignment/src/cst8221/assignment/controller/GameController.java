@@ -17,17 +17,23 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 import cst8221.assignment.model.GameRecord;
 import cst8221.assignment.model.Progress;
 import cst8221.assignment.view.ActionField;
+import cst8221.assignment.view.GameSplash;
 import cst8221.assignment.view.MainWindow;
 import cst8221.assignment.view.PlayField;
 
-public class GameController {
+public class GameController extends JFrame{
 	
 	
 	
+	/**
+	 * default serial id
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final MainWindow GAME_WINDOW = MainWindow.loadGame(); 
 	private static GameController GAME_CONTROLLER = null;
 	private static Progress progress;
@@ -35,10 +41,19 @@ public class GameController {
 	private static int[] numberCounter;
 	private static int totalCounter;
 	
+	/**
+	 * default constructor
+	 */
 	private GameController() {
 		
 	}
-	
+	/**
+	 * Method Name: start
+	 *
+	 * Purpose: To start the Game with default configuration 
+	 * Algorithm: Display the Game window by invoking GameController instance and initialize progress and record instance
+	 * 
+	 */
 	public static void start() {
 		GameController.getController();
 		progress = new Progress();
@@ -46,7 +61,13 @@ public class GameController {
 		totalCounter = 0;
 		record = new GameRecord();
 	}
-	
+	/**
+	 * Method Name: getController
+	 *
+	 * Purpose: To instantiate GameController instance with Singleton DP
+	 * Algorithm: Singleton DP
+	 * @return the GameController instance
+	 */
 	public static GameController getController() {
 		if(GAME_CONTROLLER == null)
 			GAME_CONTROLLER = new GameController();
@@ -57,6 +78,7 @@ public class GameController {
 	 * Method Name: resetGame
 	 * Purpose: Method resetGame() is used if user wants to reset the entries during the game. 
 	 * Algorithm: On playField calls method reload() with appropriate vars and resets the game. 
+	 * 
 	 */
 	public void resetGame() {
 		progress.resetProgress(GAME_WINDOW.getActionField().getDimSelected()==0?2:GAME_WINDOW.getActionField().getDimSelected());
@@ -70,8 +92,9 @@ public class GameController {
 	}
 	/**
 	 * Method Name: reloadPlayField
-	 * Purpose: Method reload is used to create window with selected dimension if reloaded. 
-	 * Algorithm: 
+	 * Purpose: To reload window with selected dimension. 
+	 * Algorithm: remove all components on PlayField and reset, reload selected number to null and re-paint PlayField
+	 * 
 	 */
 	public void reloadPlayField() {
 		GAME_WINDOW.getPlayField().removeAll();
@@ -81,7 +104,12 @@ public class GameController {
 		GAME_WINDOW.getPlayField().validate();
 		GAME_WINDOW.getPlayField().repaint();
 	}
-	
+	/**
+	 * Method Name: reloadActionField
+	 * Purpose: To reset ActionField components configurations. 
+	 * Algorithm: remove all components on ActionField and reset, reload selected number to null and re-paint PlayField
+	 * 
+	 */
 	public void resetActionField() {
 		if (!GAME_WINDOW.getActionField().isPlayMode())//checks if it is play mode 
 			return;
@@ -90,7 +118,12 @@ public class GameController {
 		
 		GAME_WINDOW.getActionField().resetTimer();
 	}
-	
+	/**
+	 * Method Name: resetCounters
+	 * Purpose: To reset the counter of the same number/char and the total numbers/chars filled to the play field 
+	 * Algorithm: reset numberCounter and totalCounter to 0
+	 * @param dim current dimension number
+	 */
 	public void resetCounters(int dim) {
 		numberCounter = new int[(int)Math.pow(dim, 2)];
 		totalCounter = 0;
@@ -294,7 +327,7 @@ public class GameController {
 		btn.setText(number);
 		if(!muted) btn.setBackground(Color.CYAN);//sets the background color 
 		GAME_WINDOW.getPlayField().getCellsTakenMap().put(btn.getName(), number);
-		
+		GAME_WINDOW.getPlayField().dimBlockButtonBelong(btn).addFilledChars(number);
 		numberCounter[numRep-1]++;//increments counter 
 		totalCounter++;
 		
@@ -338,13 +371,18 @@ public class GameController {
 			}
 		}
 	}
-	
+	/**
+	 * Method: revertToUncomplete
+	 * Purpose: to change back the color of buttons from complete status to incomplete status
+	 * @param number the number/char to be fill to current button
+	 */
 	public void revertToUncomplete(String number) {
 		for(int i=0; i<GAME_WINDOW.getPlayField().getNumberJButtons().length; i++) {
 			for(int j=0; j<GAME_WINDOW.getPlayField().getNumberJButtons()[i].length; j++) {
 				if(number!=null) {
 					if(GAME_WINDOW.getPlayField().getNumberJButtons()[i][j].getText()!=null && GAME_WINDOW.getPlayField().getNumberJButtons()[i][j].getText().equals(number)) {
 						GAME_WINDOW.getPlayField().getNumberJButtons()[i][j].setBackground(Color.CYAN);
+						GAME_WINDOW.getPlayField().getNumberJButtons()[i][j].setForeground(Color.BLACK);
 					}
 				}
 			}
@@ -371,19 +409,83 @@ public class GameController {
 		if(record.isBreakRecord()) {
 			addToModel(record.getTopSolution());
 		}
+		//TODO: add splash pane here
+		popupSplash("images/sudoku_winner.png", 2000);
+		
+		
 	}
-	
+	/**
+	 * Method: addToModel
+	 * Purpose: to add current progress to the game model
+	 * Algorithm: //TODO
+	 * @param p
+	 */
 	public void addToModel(Progress p) {
 		
 	}
-
+	/**
+	 * getter of progress
+	 * @return progress
+	 */
 	public static Progress getProgress() {
 		return progress;
 	}
-
+	/**
+	 * setter of progress
+	 * @param progress progress to be assigned to progress field
+	 */
 	public static void setProgress(Progress progress) {
 		GameController.progress = progress;
 	}
+	
+	/**
+	 * Method: setColor
+	 * Purpose: to set color for all the buttons in play field
+	 * Algorithm: iterates every dim block and set the color of all the buttons in each dim block. 
+	 * @param color the color to be set to all the buttons in play field.
+	 */
+	public static void setColor(Color color) {
+		int r = color.getRed();
+		int g = color.getGreen();
+		int b = color.getBlue();
+		
+		int dim = GAME_WINDOW.getActionField().getDimSelected();
+		for(int i=0; i<dim; i++)
+			for(int j=0; j<dim; j++)
+				if(i%2==0 && j%2==0|| i%2!=0 && j%2!=0){
+					for(JButton btn: GAME_WINDOW.getPlayField().getDimBlocks()[i][j].getButtons()) {
+						btn.setBackground(new Color(b,r,g));
+						Color c = btn.getBackground();
+						//https://stackoverflow.com/questions/4672271/reverse-opposing-colors
+						double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000;
+						btn.setForeground(y >= 128 ? Color.black : Color.white);
+					}
+				}else {
+					for(JButton btn: GAME_WINDOW.getPlayField().getDimBlocks()[i][j].getButtons())
+						btn.setBackground(color);
+				}
+	}
+	/**
+	 * Method: currentColor
+	 * Purpose: to get the color of the buttons in the first dimension block on the play field
+	 * Algorithm:  GAME_WINDOW.getPlayField().getDimBlocks()[0][0].getButtons().get(0).getBackground()
+	 * @return the color of the buttons in the first dimension block
+	 */
+	public static Color currentColor() {
+		return GAME_WINDOW.getPlayField().getDimBlocks()[0][0].getButtons().get(0).getBackground();
+	}
+	/**
+	 * Method: popupSplash
+	 * Purpose: to display a splash screen with specific picture and last for a specific duration
+	 * Algorithm: instantiate a GameSplash object
+	 * @param path the location of picture to display to the splash screen
+	 * @param ms the time that the splash screen to last
+	 */
+	public static void popupSplash(String path, long ms) {
+		new GameSplash(path, ms);
+	}
+	
+	
 
 
 }

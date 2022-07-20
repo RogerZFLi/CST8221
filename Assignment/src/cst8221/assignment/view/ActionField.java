@@ -103,6 +103,8 @@ public class ActionField extends JPanel {
 			window.getPlayField().setNumSelected(null);
 			dimSelected = (Integer) dim.getSelectedItem();//sets the var dimSelected with the value of selected item
 			window.getPlayField().reload(window, dimSelected);//reloads window with the game with the proper dim 
+			GameController.getController().resetGame();
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
 			window.log("Reloading...");
 			window.log("Dimension number set to :" + dimSelected);
 
@@ -129,7 +131,7 @@ public class ActionField extends JPanel {
 					GameController.getController().loadMasked((String) level.getSelectedItem(), dimSelected);
 				window.log("Set level to '" + level.getSelectedItem() + "....");
 			}
-
+			GameController.popupSplash("images/sudoku_cfg.png", 1000);
 		});
 		
 		this.add(levelLabel);

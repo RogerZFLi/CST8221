@@ -14,9 +14,6 @@ import java.util.Collections;
 
 public class GameRecord implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6180990269034121879L;
 	/**
 	 * 

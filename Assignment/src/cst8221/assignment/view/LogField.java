@@ -194,7 +194,7 @@ public class LogField extends JPanel {
 		JLabel modeLabel = new JLabel("Mode: ");
 		JRadioButton designRadioButton = new JRadioButton("Design");
 		designRadioButton.setSelected(true);
-		designRadioButton.addChangeListener(e->{
+		designRadioButton.addActionListener(e->{
 			if(designRadioButton.isSelected()) {
 				ActionField.setTimerStop(true);
 				window.getActionField().reset();
