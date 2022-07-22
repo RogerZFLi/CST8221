@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"cst8221.assignment.component"},{"l":"cst8221.assignment.main"},{"l":"cst8221.assignment.window"}]
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"cst8221.assignment.controller"},{"l":"cst8221.assignment.main"},{"l":"cst8221.assignment.model"},{"l":"cst8221.assignment.view"},{"l":"cst8221.assignment32.cs"}];updateSearchResults();
