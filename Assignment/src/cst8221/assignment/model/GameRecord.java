@@ -21,17 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-<<<<<<< HEAD
-/**
- * This class 
- * @author Roger Li
- * @author Denys Savskyi
- * @see Serializable
- *
- */
-
-=======
-
 /**
  * Class Name: GameRecord
  * Method List:  GameRecord(),loadRecord(), updateRecord(Progress p), saveRecord(), getTopSolution(), 
@@ -49,7 +38,7 @@ import java.util.Collections;
  * @since JDK 18.0.1.1
  * @since JRE JavaSE-14
  */
->>>>>>> origin/master
+
 public class GameRecord implements Serializable{
 	
 	/**
