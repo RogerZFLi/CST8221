@@ -10,7 +10,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+/**
+ * This class 
+ * @author Roger Li
+ * @author Denys Savskyi
+ * @see Serializable
+ *
+ */
 
 public class GameRecord implements Serializable{
 	
