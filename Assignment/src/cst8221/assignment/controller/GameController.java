@@ -325,7 +325,10 @@ public class GameController extends JFrame{
 			revertToUncomplete(originalNumber);
 		}
 		btn.setText(number);
-		if(!muted) btn.setBackground(Color.CYAN);//sets the background color 
+		if(!muted) {
+			btn.setBackground(Color.CYAN);//sets the background color 
+			btn.setForeground(Color.BLACK);
+		}
 		GAME_WINDOW.getPlayField().getCellsTakenMap().put(btn.getName(), number);
 		GAME_WINDOW.getPlayField().dimBlockButtonBelong(btn).addFilledChars(number);
 		numberCounter[numRep-1]++;//increments counter 
